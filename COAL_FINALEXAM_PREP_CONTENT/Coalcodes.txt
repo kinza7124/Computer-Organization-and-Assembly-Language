@@ -1,0 +1,1698 @@
+----------------------------------------------------------
+INCLUDE Irvine32.inc
+.data
+arrayB BYTE 60,70,80
+arrayW WORD 150,250,350
+arrayD DWORD 600,1200,1800
+.code
+main PROC
+ mov esi, OFFSET arrayB         
+    mov al, [esi]                  
+    mov bl, [esi + 2*TYPE arrayB]  
+    add al, bl                     
+    movzx eax, al                  
+    call WriteDec                   
+    call Crlf                      
+
+    mov esi, OFFSET arrayW        
+    mov ax, [esi]                  
+    mov bx, [esi + 2*TYPE arrayW]  
+    add ax, bx                     
+    movzx eax, ax                  
+    call WriteDec                  
+    call Crlf                      
+
+    mov esi, OFFSET arrayD      
+    mov eax, [esi]                 
+    mov ebx, [esi + 2*TYPE arrayD] 
+    add eax, ebx                   
+    call WriteDec                  
+    call Crlf                      
+
+call DumpRegs
+exit
+main ENDP
+END main
+
+---------------------------------------------------------
+
+INCLUDE Irvine32.inc
+.data
+a BYTE 11h
+b BYTE 10h
+c BYTE 30h
+d BYTE 40h
+.code
+main PROC
+mov eax, 0
+mov ebx, 0
+mov ecx, 0
+mov edx, 0
+mov al, a
+mov bl, b
+mov cl, c
+mov dl, d
+add al, bl
+mov ah, a
+sub ah, bl
+sub ah, al
+add al, cl
+add al, dl
+movzx ebx, al
+call DumpRegs
+exit
+main ENDP
+END main
+
+--------------------------------------------------------
+
+INCLUDE Irvine32.inc
+.data
+dArray DWORD 50 DUP(?)
+.code
+main PROC
+
+call DumpRegs
+exit
+main ENDP
+END main
+
+----------------------------------------------------------
+
+INCLUDE Irvine32.inc
+.data
+var BYTE 500 DUP("TEST")
+.code
+main PROC
+
+call DumpRegs
+exit
+main ENDP
+END main
+
+INCLUDE Irvine32.inc
+.data
+bArray BYTE 20 DUP (0)
+.code
+main PROC
+
+call DumpRegs
+exit
+main ENDP
+END main
+
+----------------------------------------------------------
+
+INCLUDE Irvine32.inc
+.data
+a BYTE 00010001b
+b BYTE 00010000b
+c BYTE 00110000b
+d BYTE 01000000b
+.code
+main PROC
+mov eax, 0
+mov ebx, 0
+mov ecx, 0
+mov edx, 0
+mov al, a
+mov bl, b
+mov cl, c
+mov dl, d
+add al, bl
+mov ah, a
+sub ah, bl
+sub ah, al
+add al, cl
+add al, dl
+movzx ebx, al
+call DumpRegs
+exit
+main ENDP
+END main
+
+---------------------------------------------------------
+
+INCLUDE Irvine32.inc
+.data
+val1 SWORD ?
+val2 SBYTE -11d
+.code
+main PROC
+call DumpRegs
+exit
+main ENDP
+END main
+
+INCLUDE Irvine32.inc
+.data
+val3 SDWORD -2147483648d
+.code
+main PROC
+call DumpRegs
+exit
+main ENDP
+END main
+
+--------------------------------------------------------
+
+INCLUDE Irvine32.inc
+.data
+list WORD 1000,2000,3000
+.code
+main PROC
+call DumpRegs
+exit
+main ENDP
+END main
+
+---------------------------------------------------------
+
+INCLUDE Irvine32.inc
+.data
+favcolor BYTE "BLACK" ,0
+A WORD 12
+B WORD 2
+C WORD 13
+D WORD 8
+E WORD 14
+.code
+main PROC
+call DumpRegs
+exit
+main ENDP
+END main
+
+----------------------------------------------------------
+
+INCLUDE Irvine32.inc
+.data
+a BYTE 11h
+b BYTE 10h
+c BYTE 30h
+d BYTE 40h
+.code
+main PROC
+mov eax, 0
+mov ebx, 0
+mov ecx, 0
+mov edx, 0
+mov al, a
+mov bl, b
+mov cl, c
+mov dl, d
+add al, bl 
+mov ah, a
+sub ah, bl
+sub ah, al
+add al, cl
+add al, dl
+movzx ebx, al
+call DumpRegs
+exit
+main ENDP
+END main
+
+----------------------------------------------------------
+
+INCLUDE Irvine32.inc
+.data
+a BYTE 00010001b
+b BYTE 00010000b
+c BYTE 00110000b
+d BYTE 01000000b
+.code
+main PROC
+mov eax, 0
+mov ebx, 0
+mov ecx, 0
+mov edx, 0
+mov al, a
+mov bl, b
+mov cl, c
+mov dl, d
+add al, bl
+mov ah, a
+sub ah, bl
+sub ah, al
+add al, cl
+add al, dl
+movzx ebx, al
+call DumpRegs
+exit
+main ENDP
+END main
+
+-------------------------------------------------------
+
+INCLUDE Irvine32.inc
+.data
+wArray WORD 1000h,2000h,3000h
+.code
+main PROC
+call DumpRegs
+exit
+main ENDP
+END main
+
+INCLUDE Irvine32.inc
+.data
+dArray DWORD 50 DUP(?)
+.code
+main PROC
+call DumpRegs
+exit
+main ENDP
+END main
+
+----------------------------------------------------------
+
+INCLUDE Irvine32.inc
+.data
+var BYTE 500 DUP("TEST")
+.code
+main PROC
+
+call DumpRegs
+exit
+main ENDP
+END main
+
+--------------------------------------------------------
+
+INCLUDE Irvine32.inc
+.data
+bArray BYTE 20 DUP (0)
+.code
+main PROC
+
+call DumpRegs
+exit
+main ENDP
+END main
+
+--------------------------------------------------------
+
+INCLUDE Irvine32.inc
+.code
+main PROC
+movzx eax 4B494Eh
+
+call DumpRegs
+exit
+main ENDP
+END main
+
+----------------------------------------------------------
+
+INCLUDE Irvine32.inc
+.data
+varB BYTE 10
+varW WORD -150
+varD DWORD 600
+.code
+main PROC
+movzx eax, varB
+movsx ebx, varW
+mov ecx, varD
+call DumpRegs
+exit
+main ENDP
+END main
+
+----------------------------------------------------
+
+INCLUDE Irvine32.inc
+.code
+mov eax, 0
+add eax, 89
+add eax, 75Fh
+add eax, 1101b
+sub eax, 46o
+sub eax, 28
+call DumpRegs
+exit
+main ENDP
+END main 
+
+---------------------------------------------------------
+
+INCLUDE Irvine32.inc
+.data
+val1 DWORD 25h
+val2 BYTE 36o
+val3 WORD 20d
+
+.code
+mov eax, 0
+add eax, val1
+add eax, val2
+add eax, val3
+movsx ebx, -654h
+add eax, ebx
+call DumpRegs
+exit
+main ENDP
+END main
+
+----------------------------------------------------------
+
+INCLUDE Irvine32.inc
+.data
+A = 0FF10h
+B = 0E10Bh
+
+.code
+movzx eax, A
+xchg eax, B
+xchg A, eax
+call DumpRegs
+exit
+main ENDP
+END main
+
+-------------------------------------------------------
+
+INCLUDE Irvine32.inc
+.data
+val1 BYTE 10h
+val2 WORD 8000h
+val3 DWORD 0FFFFh
+val4 WORD 7FFFh
+
+.code
+inc val2
+sub eax, val3
+mov ebx, val4
+mov ecx, val2
+sub ebx, ecx
+call DumpRegs
+exit
+main ENDP
+END main
+
+------------------------------------------------------
+
+INCLUDE Irvine32.inc
+.data
+arr1 WORD 5h, 10h
+result WORD 0
+.code
+main PROC
+xor ax, ax
+mov esi, 0
+    L1:
+       add ax, [arr1+esi]
+       add esi, TYPE arr1
+       cmp esi, 4
+       jne L1
+mov [result], ax
+exit
+main ENDP
+END main
+
+----------------------------------------------------------
+
+INCLUDE Irvine32.inc
+.data
+arr1 WORD 5h, 10h
+result WORD 0
+.code
+main PROC
+xor ax, ax
+mov ecx, LENGTHOF arr1
+mov esi, 0
+    L1:
+       add ax, [arr1+esi]
+       add esi, TYPE arr1
+       loop L1
+mov [result], ax
+exit
+main ENDP
+END main
+
+-----------------------------------------------------------
+
+TITLE Copying a String
+INCLUDE Irvine32.inc
+.data
+source BYTE "This is me Kinza",0
+target BYTE SIZEOF source DUP(0)
+.code
+main PROC
+mov esi, 0
+mov ecx, SIZEOF source
+L1:
+    mov al, source[esi]
+    mov target[esi], al
+    inc esi
+    loop L1
+exit
+main ENDP
+END main
+
+---------------------------------------------------------
+
+TITLE what will be the value of eax
+INCLUDE Irvine32.inc
+.code
+main PROC 
+mov eax, 0
+mov ecx, 10
+L1:
+    mov eax, 3
+    mov ecx, 5
+       L2:
+       add eax, 5
+       loop L2  
+
+loop L1
+
+exit
+main ENDP
+END main
+
+-----------------------------------------------------------
+
+TITLE to print the pattern
+INCLUDE Irvine32.inc
+.data
+numstars DWORD 5
+.code
+main PROC 
+mov ecx, numstars
+        outerloop:
+             push ecx
+             mov edx, numstars
+             sub edx, 1
+             
+                  innerloop:
+                       mov al, '*'
+                       call WriteChar
+                       dec edx
+                       jnz innerloop
+            call Crlf
+            pop ecx
+            loop outerloop
+exit
+main ENDP
+END main
+
+-----------------------------------------------------------
+
+TITLE to print the pattern
+INCLUDE Irvine32.inc
+.data
+numstars DWORD 5
+.code
+main PROC 
+mov ecx, numstars
+mov ebx, numstars
+        outerloop:
+             push ecx
+             mov edx, ebx
+             mov esi, 1
+                  innerloop:
+                       mov eax, esi
+                       call WriteInt
+                       inc esi
+                       dec edx
+                       jnz innerloop
+            call Crlf
+            pop ecx
+            dec ebx
+            loop outerloop
+exit
+main ENDP
+END main
+
+-----------------------------------------------------------------
+
+TITLE Reverse an array
+INCLUDE Irvine32.inc
+.data
+arr DWORD 1, 2, 3, 4, 5, 6, 7, 8         ; Array of integers
+arrsize = LENGTHOF arr                    ; Number of elements in the array
+elementsize = TYPE arr                    ; Size of each element in bytes
+
+.code
+main PROC
+    ; Initialize pointers
+    mov esi, OFFSET arr                   ; ESI points to the first element of the array
+    mov edi, OFFSET arr                   ; EDI will point to the last element
+    add edi, (arrsize - 1) * elementsize  ; EDI points to the last element of the array
+
+reverse_loop:
+    cmp esi, edi                          ; Check if ESI has crossed EDI
+    jge done                              ; Exit if pointers cross or meet
+
+    ; Swap the elements at ESI and EDI
+    mov eax, [esi]                        ; Load the value from ESI into EAX
+    mov ebx, [edi]                        ; Load the value from EDI into EBX
+    xchg eax, ebx
+    mov [esi], eax                        ; Store EBX at ESI (swap)
+    mov [edi], ebx                        ; Store EAX at EDI (swap)
+
+    ; Move pointers inward
+    add esi, elementsize                  ; Move ESI to the next element
+    sub edi, elementsize                  ; Move EDI to the previous element
+    jmp reverse_loop                      ; Repeat the loop
+
+done:
+    mov esi, OFFSET arr                   ; Reset ESI to the start of the array
+    mov ecx, arrsize                      ; ECX holds the number of elements
+    print_loop:
+    mov eax, [esi]                        ; Load the current array element into EAX
+    call WriteDec                         ; Print the integer in EAX
+    call Crlf                             ; Print a new line for each element
+    add esi, elementsize                  ; Move to the next element
+    loop print_loop                       ; Loop until ECX becomes 0 (all elements printed)
+
+    exit
+main ENDP
+END main
+
+----------------------------------------------------------------
+
+TITLE Copy a String Backwards
+INCLUDE Irvine32.inc
+
+.data
+source BYTE "Hello, World!", 0      ; Source string with null terminator
+target BYTE SIZEOF source DUP(?) ; Destination string (same size as source)
+sourcesize = LENGTHOF source - 1        ; Exclude the null terminator from length
+
+.code
+main PROC
+    ; Initialize pointers
+    mov esi, OFFSET source           ; ESI points to the first character of source string
+    mov edi, OFFSET target          ; EDI points to the first character of destination string
+    add esi, sourcesize - 1                ; Move ESI to point to the last character of the source string
+    mov ecx, sourcesize                    ; ECX holds the number of characters to copy (excluding null terminator)
+
+reverse_loop:
+    mov al, [esi]                       ; Load character from source into AL
+    mov [edi], al                       ; Store the character in the destination string
+    dec esi                             ; Move ESI to the previous character
+    inc edi                             ; Move EDI to the next character
+    loop reverse_loop                   ; Repeat until all characters are copied
+
+    ; Add null terminator to destination string
+    mov BYTE PTR [edi], 0
+
+    ; Print the reversed string
+    mov edx, OFFSET target          ; Load the address of the destination string into EDX
+    call WriteString                    ; Print the reversed string
+    call Crlf                           ; Print a newline
+
+    exit
+main ENDP
+END main
+
+---------------------------------------------------------------
+
+TITLE Fibonacci sequence
+INCLUDE Irvine32.inc
+.code
+main PROC
+    ; Initializing the first two Fibonacci numbers
+    mov eax, 1              ; Fib(1)
+    mov ebx, 1              ; Fib(2)
+    
+    ; Display the first Fibonacci number (Fib(1))
+    call DumpRegs
+
+    ; Display the second Fibonacci number (Fib(2))
+    call DumpRegs
+
+    ; Calculate Fibonacci sequence for n = 3 to n = 7
+    mov ecx, 7              ; We need to calculate 5 more values (Fib(3) to Fib(7))
+
+fib_loop:
+    mov edx, eax            ; Temporarily store the previous Fib(n-2) in EDX
+    add eax, ebx            ; EAX = Fib(n) = Fib(n-1) + Fib(n-2)
+    mov ebx, edx            ; EBX = Fib(n-1), which is the old Fib(n-2)
+
+    ; Display the current Fibonacci number in EAX
+    call DumpRegs
+
+    ; Decrease loop counter and continue
+    dec ecx
+    jnz fib_loop
+
+    ; Exit the program
+    exit
+main ENDP
+END main
+
+-----------------------------------------------------------------
+
+TITLE Direct offset addressing
+INCLUDE Irvine32.inc
+.data
+Uarray WORD 1000h,2000h,3000h,4000h
+Sarray SWORD -1,-2,-3,-4
+.code
+main PROC 
+    ; Load values from Uarray into EAX, EBX, ECX, EDX using direct-offset addressing
+    movzx eax,  [Uarray]     ; Move Uarray[0] to EAX (zero extend)
+    movzx ebx, [Uarray+2]   ; Move Uarray[1] to EBX (zero extend)
+    movzx ecx, [Uarray+4]   ; Move Uarray[2] to ECX (zero extend)
+    movzx edx,  [Uarray+6]   ; Move Uarray[3] to EDX (zero extend)
+
+    ; Display the register values for Uarray
+    call DumpRegs
+
+    ; Load values from Sarray into EAX, EBX, ECX, EDX using direct-offset addressing
+    movsx eax,  [Sarray]     ; Move Sarray[0] to EAX (sign extend)
+    movsx ebx, [Sarray+2]   ; Move Sarray[1] to EBX (sign extend)
+  ;  movsx ecx, [Sarray+4]   ; Move Sarray[2] to ECX (sign extend)
+    movsx edx, [Sarray+6]   ; Move Sarray[3] to EDX (sign extend)
+
+    ; Display the register values for Sarray
+    call DumpRegs
+exit
+main ENDP
+END main
+
+----------------------------------------------------------------
+
+TITLE Rotate 32-bit Array forward
+INCLUDE Irvine32.inc
+.data
+arr DWORD 10, 20, 30, 40
+arrsize = LENGTHOF arr 
+arrt = TYPE arr
+.code
+main PROC
+mov esi, OFFSET arr
+mov ecx, arrsize
+mov ebx, ecx
+sub ebx, 1
+mov eax, [esi+ebx * 4]
+dec ecx
+mov ebx, 0
+      shiftloop:
+      mov ebx, ecx
+      sub ebx, 1
+      mov edx, [esi + ebx * 4]
+      mov [esi + ecx * 4], edx
+      dec ecx
+      jnz shiftloop
+
+      mov [esi], eax
+      mov ecx, arrsize
+      mov esi, OFFSET arr
+      printloop:
+      mov eax, [esi]
+      call WriteInt
+      call Crlf
+      add esi, 4
+      loop printloop
+
+exit
+main ENDP
+END main
+
+------------------------------------------------------------------------
+
+TITLE Summing the gaps 
+INCLUDE Irvine32.inc
+.data
+arr DWORD 0, 2, 5, 9, 10
+arrsize = LENGTHOF arr 
+arrt = TYPE arr
+.code
+main PROC
+mov esi, OFFSET arr
+mov ecx, arrsize
+dec ecx
+mov edx, 0
+L1:
+   mov eax, [esi + ecx *4]
+   dec ecx
+   mov ebx, [esi + ecx * 4]
+   inc ecx
+   sub eax, ebx
+   add edx, eax
+   loop L1
+   mov eax, edx
+   call WriteDec
+    call Crlf
+      mov ecx, arrsize
+      mov esi, OFFSET arr
+      printloop:
+      mov eax, [esi]
+      call WriteInt
+      call Crlf
+      add esi, 4
+      loop printloop
+
+exit
+main ENDP
+END main
+
+----------------------------------------------------------------
+
+TITLE Exchanging the pairs
+INCLUDE Irvine32.inc
+.data
+arr BYTE 1, 2, 3, 4, 5, 6
+arrlen = LENGTHOF arr
+arrsize = TYPE arr
+.code
+main PROC
+mov esi, 0
+mov ecx, arrlen
+L1:
+mov al, [arr + esi]
+mov bl, [arr + esi +arrsize]
+mov [arr + esi], bl
+mov [arr + esi + 1], al
+add esi, arrsize*2
+loop L1
+mov esi, OFFSET arr
+mov ecx, LENGTHOF arr
+ printloop:
+     movzx eax, BYTE PTR [esi]
+     call WriteDec
+     call Crlf
+     add esi, arrsize
+     loop printloop
+ 
+   exit
+main ENDP
+END main
+
+---------------------------------------------------------------
+
+TITLE Converting from Big Endian to Little Endian
+INCLUDE Irvine32.inc
+
+.data
+bigEndian BYTE 12h, 34h, 56h, 78h ; Define the big-endian byte array
+littleEndian DWORD ?                ; Define a DWORD to store the little-endian value
+
+.code
+main PROC
+    ; Load bytes from bigEndian into EAX in reverse order
+    mov al, [bigEndian + 3]        ; Load the last byte (78h) into AL
+    mov ah, [bigEndian + 2]        ; Load the third byte (56h) into AH
+    mov dl, [bigEndian + 1]        ; Load the second byte (34h) into DL
+    mov dh, [bigEndian]             ; Load the first byte (12h) into DH
+
+    ; Combine the bytes into littleEndian
+    mov littleEndian, eax           ; Move the combined value into littleEndian
+
+    ; Optional: Print the result (for demonstration)
+    mov eax, littleEndian           ; Move the little-endian value into EAX
+    call WriteHex                   ; Print the value as hexadecimal
+    call Crlf                       ; Print a new line
+
+    exit
+main ENDP
+END main
+
+-----------------------------------------------------------------------
+
+TITLE Sorting an Array
+INCLUDE Irvine32.inc
+.data
+arr DWORD 1, 4, 2, 3, 6, 5, 10, 8 
+swap BYTE 0
+
+.code
+main PROC
+ mov ecx, LENGTHOF arr 
+      outerloop:
+            mov [swap], 0
+            mov ebx, 0
+        innerloop:
+        mov eax, [arr+ebx]
+        mov edx, [arr+ebx+4]
+        cmp eax, edx
+        jbe noswap
+        ;swap
+       mov [arr + ebx], edx       
+       mov [arr + ebx + 4], eax     
+       mov [swap], 1
+    noswap:
+    add ebx, 4
+    cmp ebx, (LENGTHOF arr - 1) * 4
+    jl innerloop
+    cmp [swap], 1
+    je outerloop
+
+    mov esi, OFFSET arr
+    mov ecx, LENGTHOF arr
+    printloop:
+    mov eax, [esi]
+    call WriteDec
+    call Crlf
+    add esi, 4
+    loop printloop
+exit
+main ENDP
+END main
+
+------------------------------------------------------------
+
+TITLE Employee Data Input and Salary Calculation
+INCLUDE Irvine32.inc
+.data
+EmployeeID DWORD 5 DUP(0)          
+Names BYTE 5 * 30 DUP(0)            
+YearOfBirth DWORD 5 DUP(0)          
+AnnualSalary DWORD 5 DUP(0)          
+TotalSalary DWORD 0                  
+MAX_EMPLOYEES DWORD 5                 
+promptID BYTE "Enter Employee ID: ", 0
+promptName BYTE "Enter Employee Name: ", 0
+promptYear BYTE "Enter Year of Birth: ", 0
+promptSalary BYTE "Enter Annual Salary: ", 0
+
+.code
+main PROC
+    mov ecx, 0                     
+
+inputloop:
+    mov edx, OFFSET promptID
+    call WriteString            
+    call ReadInt                    
+    mov [EmployeeID + ecx * 4], eax   
+
+  ;Name
+   ; mov edx, OFFSET promptName
+    ;call WriteString                
+    ;lea edx, Names                 
+    ;mov esi, ecx                   
+    ;call ReadString                  
+    ;mov [edx + esi ], eax        
+    ;mov byte ptr [esi], 0
+
+    mov edx, OFFSET promptYear
+    call WriteString                  
+    call ReadInt                      
+    mov [YearOfBirth + ecx * 4], eax  
+
+    mov edx, OFFSET promptSalary
+    call WriteString                  
+    call ReadInt                      
+    mov [AnnualSalary + ecx * 4], eax  
+
+    inc ecx                          
+    cmp ecx, MAX_EMPLOYEES         
+    jl inputloop                  
+
+    mov ecx, MAX_EMPLOYEES          
+    mov eax, 0                       
+    mov esi, OFFSET AnnualSalary     
+
+salaryloop:
+    add eax, [esi]                   
+    add esi, 4                       
+    loop salaryloop 
+    
+    mov TotalSalary, eax
+
+    mov edx, TotalSalary           
+    call WriteDec                  
+    call Crlf                     
+
+    exit
+    main ENDP
+    END main
+
+------------------------------------------------------------------
+
+TITLE COMPARE NUMBERS
+INCLUDE Irvine32.inc
+.data
+_x DWORD 10h
+_y DWORD 20h
+msg1 BYTE "Destination and source are equal",0
+msg2 BYTE "Destination is less than source",0
+msg3 BYTE "Destination is greater than source",0
+.code
+main PROC
+mov eax, 0
+mov ebx, 0
+mov eax, _x
+mov ebx, _y
+cmp eax, ebx 
+je equal
+jg greater
+jl less
+equal:
+mov edx, OFFSET msg1 
+call WriteString
+greater:
+mov edx, OFFSET msg3
+call WriteString
+less:
+mov edx, OFFSET msg2
+call WriteString
+exit
+main ENDP
+END main
+
+-----------------------------------------------------------
+
+TITLE Compare Array Elements
+INCLUDE Irvine32.inc
+.data
+x DWORD 4
+arr DWORD 0, 2, 4, 6, 5, 8, 6  ; Example array
+msg1 BYTE "arr[x] is equal to x", 0
+msg2 BYTE "x is less than arr[x]", 0
+msg3 BYTE "x is greater than arr[x]", 0
+.code
+main PROC
+    mov ebx, 0 
+    mov ebx, x
+    mov esi,0
+    mov ecx, LENGTHOF arr    
+L1:
+    cmp esi, ecx
+    jge end_loop
+    mov eax, arr[esi*4]     
+    cmp ebx, eax
+    je equal
+    jg greater
+    jl less
+   next_iteration:
+   inc esi
+   jmp L1
+
+ equal:
+ mov edx, OFFSET msg1
+ call WriteString
+ call Crlf
+ jmp next_iteration
+  greater:
+ mov edx, OFFSET msg3
+ call WriteString
+ call Crlf
+  jmp next_iteration
+  less:
+ mov edx, OFFSET msg2
+ call WriteString
+call CrLf     
+ jmp next_iteration
+
+end_loop:
+exit
+main ENDP
+END main
+
+-----------------------------------------------------------
+
+TITLE COMPARE NUMBERS
+INCLUDE Irvine32.inc
+.data
+_x DWORD 10h
+_y DWORD 20h
+msg1 BYTE "Destination and source are equal",0
+msg2 BYTE "Destination is less than source",0
+msg3 BYTE "Destination is greater than source",0
+.code
+main PROC
+mov eax, 0
+mov ebx, 0
+mov eax, _x
+mov ebx, _y
+cmp eax, ebx 
+jz equal
+jc less
+jmp greater
+
+equal:
+mov edx, OFFSET msg1 
+call WriteString
+greater:
+mov edx, OFFSET msg3
+call WriteString
+less:
+mov edx, OFFSET msg2
+call WriteString
+exit
+main ENDP
+END main
+
+-------------------------------------------------------
+
+TITLE (a + b)^3 Implementation
+INCLUDE Irvine32.inc
+.data
+    a DWORD ?               ; Placeholder for variable a
+    b DWORD ?               ; Placeholder for variable b
+    a_cubed DWORD ?         ; To store a^3
+    b_cubed DWORD ?         ; To store b^3
+    three_a2b DWORD ?       ; To store 3a^2b
+    three_ab2 DWORD ?        ; To store 3ab^2
+    result DWORD ?          ; To store final result
+
+.code
+main PROC
+    ; Compute a^3
+    mov eax, a              ; Load a into EAX
+    imul eax, a             ; EAX = a * a (a^2)
+    imul eax, a             ; EAX = a^2 * a (a^3)
+    mov a_cubed, eax        ; Store a^3
+    ; Compute b^3
+    mov eax, b              ; Load b into EAX
+    imul eax, b             ; EAX = b * b (b^2)
+    imul eax, b             ; EAX = b^2 * b (b^3)
+    mov b_cubed, eax        ; Store b^3
+    ; Compute 3a^2b
+    mov eax, a              ; Load a into EAX
+    imul eax, a             ; EAX = a * a (a^2)
+    imul eax, b             ; EAX = a^2 * b
+    mov ebx, eax
+    shl eax, 1
+    add eax, ebx 
+    mov three_a2b, eax      ; Store 3a^2b
+    ; Compute 3ab^2
+    mov eax, b              ; Load b into EAX
+   imul eax, b             ; EAX = b * b (b^2)
+    imul eax, a             ; EAX = b^2 * a
+    mov ebx, eax
+    shl eax, 1
+    add eax, ebx
+    mov three_ab2, eax      ; Store 3ab^2
+    ; Final result: a^3 + b^3 + 3a^2b + 3ab^2
+    mov eax, a_cubed       ; Load a^3 into EAX
+    add eax, b_cubed       ; Add b^3
+    add eax, three_a2b     ; Add 3a^2b
+    add eax, three_ab2     ; Add 3ab^2
+    mov result, eax         ; Store the final result
+
+    exit
+main ENDP
+END main
+
+-------------------------------------------------------------------
+
+TITLE Left Pyramid of Numbers
+INCLUDE Irvine32.inc
+
+.data
+numstars DWORD 5           
+space BYTE ' ',0
+asterik BYTE '*',0
+
+.code
+main PROC 
+mov ebx, 0
+   outerloop:
+   inc ebx
+   mov ecx, numstars
+     innerloop:
+     mov eax, ecx
+     sub eax, ebx
+          innermost:
+           mov edx, OFFSET space
+           call WriteChar
+           dec eax
+           cmp eax, 0
+           je print_asterik
+           print_asterik:
+            mov edx, OFFSET asterik
+           call WriteChar
+           dec eax
+           cmp eax, 0
+           je innerloop
+     loop innerloop
+  cmp ebx, numstars
+  je innerloop
+
+exit                    
+main ENDP
+END main
+
+-------------------------------------------------------
+
+TITLE MSG BOX 
+Include Irvine32.inc
+.data
+msg BYTE "Random number: ",0
+caption1 BYTE "Customers library account",0
+caption2 BYTE "ID number generated",0
+.code
+main PROC
+call Randomize
+mov eax, 100               ; Set range (0 to 99)
+call RandomRange  
+mov edx, OFFSET msg
+call WriteString
+call WriteDec
+call Crlf
+
+mov ebx, OFFSET caption1
+mov edx, OFFSET caption2
+call MsgBox
+call DumpRegs
+exit
+main ENDP
+END main
+
+-----------------------------------------------------------
+
+TITLE Q1
+Include Irvine32.inc
+.data
+caloriesBurned WORD 2h
+stepsWeek1 SBYTE 5h
+stepsWeek2 SBYTE 10h
+.code
+main PROC
+movsx eax, caloriesBurned
+movzx ebx, stepsWeek1
+movzx ecx, stepsWeek2
+add eax, ebx
+add eax, ecx
+movzx ecx, stepsWeek2
+sub ecx, 5
+xchg ebx, ecx
+movsx eax, caloriesBurned
+sub eax, ecx
+cmp eax, 0
+jl negate
+negate:
+neg eax
+
+call DumpRegs
+exit
+main ENDP
+END main
+
+-----------------------------------------------------------
+
+TITLE Q3
+Include Irvine32.inc
+.data
+msg1 BYTE "Enter sales count for cake type 1 ",0
+msg2 BYTE "Enter sales count for cake type 2 ",0
+msg3 BYTE "Enter sales count for cake type 3 ",0
+type1 DWORD 4 DUP(?)
+type2 DWORD 4 DUP(?)
+type3 DWORD 4 DUP(?)
+total1 DWORD ?
+total2 DWORD ?
+total3 DWORD ?
+msg4 BYTE "Total for cake type 1 is: ",0
+msg5 BYTE "Total for cake type 2 is: ",0
+msg6 BYTE "Total for cake type 3 is: ",0
+
+.code
+main PROC
+mov ebx, 0
+mov ecx, 4
+input_loop:
+    mov edx, OFFSET msg1
+    call WriteString
+    call Crlf
+    call ReadInt
+    mov [type1+ebx], eax
+
+    mov edx, OFFSET msg2
+    call WriteString
+    call Crlf
+    call ReadInt
+    mov [type2+ebx], eax
+
+    mov edx, OFFSET msg3
+    call WriteString
+    call Crlf
+    call ReadInt
+    mov [type3+ebx], eax
+
+    add ebx, 4
+    loop input_loop
+
+    mov eax, 0
+    mov esi, OFFSET type1
+    mov ecx, 4
+    L1:
+    add eax, [esi]
+    add esi,4
+    loop L1
+    mov [total1], eax
+    mov edx, OFFSET msg4
+    call WriteString
+    mov eax, [total1]
+    call WriteDec
+    call Crlf
+
+    
+    mov eax, 0
+    mov esi, OFFSET type2
+    mov ecx, 4
+    L2:
+    add eax, [esi]
+    add esi,4
+    loop L2
+    mov [total2], eax
+    mov edx, OFFSET msg5
+    call WriteString
+    mov eax, [total2]
+    call WriteDec
+    call Crlf
+    
+    mov eax, 0
+    mov esi, OFFSET type3
+    mov ecx, 4
+    L3:
+    add eax, [esi]
+    add esi,4
+    loop L3
+    mov [total3], eax
+    mov edx, OFFSET msg6
+    call WriteString
+    mov eax, [total3]
+    call WriteDec
+    call Crlf
+call DumpRegs
+exit
+main ENDP
+END main
+
+-------------------------------------------------------------------------------
+
+TITLE DOWN ARROW PATTERN
+INCLUDE Irvine32.inc
+
+.data 
+count1 DWORD 4
+count DWORD 7
+mystr1 byte " ",0
+
+.code 
+main PROC
+
+mov ecx,4
+mov eax,8
+
+L1:
+
+call crlf
+mov edx,offset mystr1
+call writestring
+mov edx, OFFSET mystr1
+call writeString
+mov ebx,ecx
+mov ecx,count1
+
+L2:
+ call writedec           
+ loop L2
+ mov ecx,ebx
+ LOOP L1   
+
+
+; mov eax,9                     
+ ;mov ecx,4                     
+; mov ebx,1
+
+ ; lower triangle
+;L3:
+; call crlf                     
+ ;mov edx,offset mystr1         
+ ;mov esi,ebx                   
+
+;L4:
+ ;call writestring              
+ ;dec esi
+ ;cmp esi, 0
+ ;jg L4
+
+ ;mov edx,9                     
+ ;mov ecx,count                 
+;L5:
+ ;call writedec                 
+ ;loop L5 
+	
+ ;add ebx,1                     
+ ;sub count,2                   
+ ;cmp count,0                   
+ ;jle triangle             
+ ;mov ecx,4 
+	
+ ; LOOP L3                       
+
+;triangle:
+exit                          
+main ENDP 
+END main
+
+ mov eax,'*'                     
+ mov ecx,4                     
+ mov ebx,1
+
+ ; lower triangle
+L3:
+ call crlf                     
+ mov edx,offset mystr1         
+ mov esi,ebx                   
+
+L4:
+ call writestring              
+ dec esi
+ cmp esi, 0
+ jg L4
+
+ mov edx,'*'                    
+ mov ecx,count                 
+L5:
+ call writechar                
+ loop L5 
+	
+ add ebx,1                     
+ sub count,2                   
+ cmp count,0                   
+ jle triangle             
+ mov ecx,4 
+	
+  LOOP L3                       
+
+triangle:
+exit                          
+main ENDP 
+
+---------------------------------------------------------------
+
+TITLE SIGNED INTEGER COMPARISON
+Include Irvine32.inc
+.data
+msg1 BYTE "Destination is equal to the source", 0
+msg2 BYTE "Destination is less than the source", 0
+msg3 BYTE "Destination is greater than the source", 0
+source DWORD -10         ; Source is -10
+_dest DWORD -20          ; Destination is -20
+.code
+main PROC
+    mov eax, 0
+    mov eax, _dest        ; Move destination to EAX
+    mov ebx, source       ; Move source to EBX
+    cmp eax, ebx          ; Compare signed integers
+    jz Lequal             ; Jump if equal
+
+    ; Check signed comparison
+    js Lcond1             ; Jump if the sign flag is set (indicates negative result)
+
+    ; No sign flag set, check if overflow occurred
+    jo LGreater           ; Jump if overflow occurred
+    jl Lless              ; Jump if destination is less (signed comparison)
+    jg LGreater           ; Jump if destination is greater (signed comparison)
+
+Lcond1:
+    jo LGreater           ; Jump to greater if overflow occurred
+    jl Lless              ; Jump if less
+    jg LGreater           ; Jump if greater
+
+Lequal:
+    mov edx, OFFSET msg1  ; Load "equal" message
+    call WriteString
+    jmp _exit
+
+Lless:
+    mov edx, OFFSET msg2  ; Load "less than" message
+    call WriteString
+    jmp _exit
+
+LGreater:
+    mov edx, OFFSET msg3  ; Load "greater than" message
+    call WriteString
+    jmp _exit
+
+_exit:
+    call DumpRegs
+    exit
+main ENDP
+END main
+
+----------------------------------------------------------
+
+TITLE MUL Instruction with JC (Jump if Carry)
+Include Irvine32.inc
+
+.data
+byteVal BYTE 5            ; 8-bit multiplicand
+wordVal WORD 1000         ; 16-bit multiplicand
+dwordVal DWORD 100000     ; 32-bit multiplicand
+msgNoCarry BYTE "Result fits in destination register.", 0
+msgCarry BYTE "Carry flag is set, result overflows into higher registers.", 0
+
+.code
+main PROC
+    ; Case 1: 8-bit multiplication (AL)
+    mov al, 10           ; Load 8-bit multiplicand into AL
+    mov bl, byteVal      ; Load 8-bit value into BL
+    mul bl               ; AL = AL * BL, result is stored in AX
+    jc carry_case        ; Jump if Carry Flag is set
+    jmp NoCarry         ; No carry, result fits in AX
+    call DumpRegs        ; Display register values
+
+    ; Case 2: 16-bit multiplication (AX)
+    mov ax, 200          ; Load 16-bit multiplicand into AX
+    mov bx, wordVal      ; Load 16-bit value into BX
+    mul bx               ; AX = AX * BX, result is stored in DX:AX
+    jc carry_case        ; Jump if Carry Flag is set
+    jmp NoCarry         ; No carry, result fits in DX:AX
+    call DumpRegs        ; Display register values
+
+    ; Case 3: 32-bit multiplication (EAX)
+    mov eax, 50000       ; Load 32-bit multiplicand into EAX
+    mov ebx, dwordVal    ; Load 32-bit value into EBX
+    mul ebx              ; EAX = EAX * EBX, result is stored in EDX:EAX
+    jc carry_case        ; Jump if Carry Flag is set
+    jmp NoCarry         ; No carry, result fits in EDX:EAX
+    call DumpRegs        ; Display register values
+
+    jmp _exit
+
+carry_case:
+    mov edx, OFFSET msgCarry
+    call WriteString
+    jmp _exit
+
+NoCarry:
+    mov edx, OFFSET msgNoCarry
+    call WriteString
+
+_exit:
+    call DumpRegs
+    exit
+main ENDP
+END main
+
+------------------------------------------------------------------------
+
+TITLE WHILELOOP
+INCLUDE Irvine32.inc
+.data
+    myarray DWORD 100 DUP(0)       ; Reserve space for 100 integers initialized to 0
+    j DWORD 100                     ; Initialize `j` with 100 as in C code
+.code
+main PROC
+    mov ecx, j                      ; Load `j` value into ECX
+while_loop:
+    cmp ecx, 0                      ; Check if j >= 0
+    jl end_while                    ; If j < 0, exit loop
+    cmp ecx, 100                    ; Check if j <= 100
+    jg end_while                    ; If j > 100, exit loopS
+    ; Copy myarray[j] to myarray[j+1]
+    mov eax, ecx                    ; EAX = j (index)
+    mov ebx, OFFSET myarray         ; EBX = base address of myarray
+    mov edx, [ebx + eax*4]          ; Load myarray[j] into EDX (4 bytes per integer)
+    inc eax
+    mov [ebx + eax*4], edx      ; Store EDX in myarray[j+1]
+    dec eax
+    ; Decrement j
+    dec ecx                         ; j = j - 1
+    jmp while_loop                  ; Repeat loop
+
+end_while:
+    call DumpRegs                   ; Display register values for verification
+    exit
+main ENDP
+END main
+
+---------------------------------------------------------------------
+
+TITLE Count Digits
+INCLUDE Irvine32.inc
+.data
+msg BYTE "The digits in n are: ",0
+n DWORD 5000
+.code
+main PROC
+mov edx, 0
+mov eax, n
+mov ecx, 0
+call Countdigits
+mov eax, ecx
+mov edx, OFFSET msg
+call WriteString
+call WriteDec
+call Crlf
+exit
+main ENDP
+
+Countdigits PROC
+cmp eax, 0
+je basecase
+mov ebx, 10
+div ebx ; eax = eax/10
+inc ecx
+call Countdigits
+basecase:
+ret
+Countdigits ENDP
+END main
+
+---------------------------------------------------------------------------
+
+TITLE Decimal to Binary Conversion
+INCLUDE Irvine32.inc
+
+.data
+msg BYTE "Binary : ", 0           
+n DWORD 23                       
+binarynum DWORD 0                  
+
+.code
+main PROC
+mov eax, n                     
+mov binarynum, 0              
+call DecimaltoBinary          
+
+mov edx, OFFSET msg           
+call WriteString               
+mov eax, binarynum     
+call WriteBin                
+call Crlf                  
+exit                         
+main ENDP
+
+DecimaltoBinary PROC
+cmp eax, 0                    
+je Basecase
+
+mov ebx, 2                  ; Divisor (for binary conversion)
+mov edx, 0                  ; Clear EDX for the division
+div ebx                     ; EAX = EAX / 2, EDX = remainder (binary digit)
+shl binarynum, 1            ; Shift the binarynum left by 1 (make space for the new bit)
+or binarynum, edx           ; Set the least significant bit (LSB) to the remainder (0 or 1)
+
+call DecimaltoBinary        ; Recursive call to divide by 2 again
+
+Basecase:
+ret                      ; Return from the recursion
+DecimaltoBinary ENDP
+
+END main
+
+----------------------------------------------------------------------------
+
+INCLUDE Irvine32.inc
+
+.data
+target BYTE "AAEBDCFBBC", 0
+freqTable DWORD 256 DUP(0)
+alphabet BYTE "ABCDEFGHIJKLMNOPQRSTUVWXYZ",0
+
+.code
+Get_frequencies PROC targ:DWORD, freq :DWORD
+    cld
+    mov esi, targ
+    mov edi, freq
+
+    mov ecx,0
+
+count:
+    mov al, [esi + ecx]
+    test al, al
+    jz done
+
+    movzx eax, al      ;ascii val
+    inc dword ptr [edi + eax*4]
+
+    inc ecx
+    jmp count
+
+done:
+    ret
+Get_frequencies ENDP
+
+main PROC
+    INVOKE Get_frequencies, ADDR target, ADDR freqTable
+    mov edx,offset target
+    call writestring
+    call crlf
+    mov edi ,offset target
+    mov ecx, 0
+    mov esi, offset alphabet
+    print:
+        mov eax, [freqTable + ecx*4]
+        cmp eax, 0
+        je skip
+        mov al, [esi]
+        call WriteChar
+        inc esi
+        mov eax,':'
+        call Writechar
+        mov eax, [freqTable + ecx*4]
+        call WriteDec
+        mov al,' '
+        call writechar
+
+
+    skip:
+        inc ecx
+        inc edi
+        cmp ecx, 256
+        jl print
+
+    exit
+main ENDP
+END main
+
+-------------------------------------------------------------
+
+TITLE Count Digits && sum of digits
+INCLUDE Irvine32.inc
+.data
+msg BYTE "The digits in n are: ",0
+n DWORD 5000
+sum DWORD 0
+.code
+main PROC
+mov edx, 0
+mov eax, n
+mov ecx, 0
+call Countdigits
+mov eax, ecx
+mov edx, OFFSET msg
+call WriteString
+call WriteDec
+call Crlf
+mov eax, [sum]
+call WriteDec
+exit
+main ENDP
+
+Countdigits PROC
+cmp eax, 0
+je basecase
+mov ebx, 10
+div ebx ; eax = eax/10
+add [sum], edx
+inc ecx ; ecx = count++
+call Countdigits
+basecase:
+ret
+Countdigits ENDP
+END main 
+
+-----------------------------------------------------------------

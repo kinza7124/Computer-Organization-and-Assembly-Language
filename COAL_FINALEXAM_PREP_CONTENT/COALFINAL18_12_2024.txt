@@ -1,0 +1,180 @@
+-----------------------------------------------------------------------------------
+TITLE FINAL CONVERT BIN TO DEC
+INCLUDE Irvine32.inc
+.data
+    arr BYTE 0, 0, 1, 0, 1, 0, 0, 0 ; input array given in paper
+    decimalResult WORD 0         
+
+.code
+main PROC
+    mov ecx, LENGTHOF arr                 
+    mov esi, OFFSET arr            
+    mov edx, 0
+
+PushLoop:
+    movzx ax, BYTE PTR [esi]      
+    push ax                   
+    inc esi
+    loop PushLoop                  
+    mov ecx, 0
+
+PopLoop:
+    pop ax                        
+    shl ax, cl                     
+    add decimalResult,ax                 
+    inc cx
+    cmp cx, 7
+    jne PopLoop
+
+   mov eax, 0
+    mov ax, decimalResult        
+    call WriteDec                  
+    call Crlf                       
+    exit
+
+main ENDP
+END main
+------------------------------------------------
+TITLE FINAL Q
+INCLUDE Irvine32.inc
+.data
+    inputString BYTE "Nothing is worth more than time this day", 0
+    tempBuffer BYTE 50 DUP(?)                                    
+    wordCount DWORD 0                                            
+.code
+main PROC
+   mov esi, OFFSET inputString 
+   mov ebx, 0
+   mov ecx, 0
+L1:
+    mov al, [esi]           
+    cmp al, 0                    
+    je Finalize               
+
+    cmp al, ' '                  
+    je PushWord                  
+
+    mov [tempBuffer + ebx], al   
+    inc ebx                      
+    inc esi                   
+    jmp L1             
+
+PushWord:
+    mov [tempBuffer + ebx], 0  
+    lea edx, tempBuffer
+    push edx
+    mov ebx, 0                
+    inc esi
+    jmp L1
+
+Finalize:
+    mov [tempBuffer + ebx], 0    
+     lea edx, tempBuffer
+    push edx
+
+StartCounting:
+    mov esi, OFFSET inputString 
+CountWords:
+    cmp esp, OFFSET inputString              
+    je DisplayCount             
+    pop edi                       
+    inc wordCount
+    jmp CountWords            
+
+DisplayCount:
+    mov eax, 0
+    mov eax, wordCount
+    call WriteDec              
+    call Crlf                  
+    exit
+
+main ENDP
+END main
+------------------------------------------------------------------------------
+INCLUDE Irvine32.inc
+
+.data
+    op1 QWORD 4 DUP(2345678923456789)
+    op2 QWORD 4 DUP(2345678923456789)
+    result_low DWORD 0
+    result_high DWORD 0
+
+.code
+main PROC
+    mov esi, OFFSET op1
+    mov edi, OFFSET op2
+    mov ecx, 0
+    mov edx, 0
+
+AddQWORD:
+    mov eax, [esi + ecx*4]
+    mov ebx, [edi + ecx*4]
+    add eax, ebx
+    mov result_low, eax
+
+    mov eax, [esi + ecx*4 + 4]
+    mov ebx, [edi + ecx*4 + 4]
+    add eax, ebx
+    adc eax, edx
+    mov result_high, eax
+
+    inc ecx
+    cmp ecx, 4
+    jl AddQWORD
+
+    mov eax, result_low
+    call WriteDec
+    call Crlf
+
+    mov eax, result_high
+    call WriteDec
+    call Crlf
+
+    exit
+main ENDP
+
+END main
+---------------------------------------------------------------------------
+INCLUDE Irvine32.inc
+
+.data
+    Destination BYTE "abcdef", 0
+    Source BYTE "cefq", 0
+    Result BYTE 5 DUP(0)
+
+.code
+main PROC
+    mov esi, OFFSET Destination
+    mov edi, OFFSET Source
+    mov ebx, OFFSET Result
+    mov ecx, 0
+
+CompareLoop:
+    mov al, [esi]
+    cmp al, 0
+    je Done
+
+    mov edi, OFFSET Source
+    mov edx, OFFSET Source
+    lea esi, [esi]
+
+    repne cmpsb
+
+    jne SkipCharacter
+    mov [ebx + ecx], al
+    inc ecx
+
+SkipCharacter:
+    inc esi
+    jmp CompareLoop
+
+Done:
+    mov byte ptr [ebx + ecx], 0
+    mov eax, OFFSET Result
+    call WriteString
+    call Crlf
+    exit
+
+main ENDP
+END main
+
