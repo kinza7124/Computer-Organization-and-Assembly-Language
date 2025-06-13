@@ -1,0 +1,321 @@
+Q1:
+TITLE Scan string
+INCLUDE Irvine32.inc
+.data
+Str1 BYTE "127&j~3#^&*#*#45^",0
+msgfound BYTE "Index of character found is: ", 0
+msgnotfound BYTE "Not found",0
+.code
+main PROC
+mov edi,OFFSET Str1 ; EDI points to the string
+mov al,'#'          ; search for #
+call Scan_string
+exit
+main ENDP
+
+Scan_string PROC
+mov ecx,LENGTHOF Str1 ; set the search count
+Cld                 ; direction = forward
+repne scasb         ; repeat while not equal
+jnz quit            ; quit if letter not found
+dec edi             ; found: back up EDI
+mov edx, OFFSET msgfound
+call Writestring
+mov eax, 0
+sub edi, OFFSET Str1
+mov eax, edi
+call Writedec
+jmp _exit
+quit:
+mov edx, OFFSET msgnotfound
+call WriteString
+_exit:
+ret
+Scan_string ENDP
+END main
+
+Q2:
+TITLE Scan string
+INCLUDE Irvine32.inc
+.data
+Str1 BYTE "127&j~3#^&*#*#45^",0
+msgfound BYTE "Index of character found is: ", 0
+msgnotfound BYTE "Not found",0
+.code
+main PROC
+push OFFSET Str1 ; EDI points to the string
+push '#'          ; search for #
+push LENGTHOF Str1
+call Scan_string
+call Crlf
+exit
+main ENDP
+
+Scan_string PROC 
+push ebp
+mov ebp, esp
+mov edi, [ebp+16]
+mov al, [ebp+12]
+mov ecx, [ebp+8]
+Cld                 ; direction = forward
+repne scasb         ; repeat while not equal
+jnz quit            ; quit if letter not found
+dec edi             ; found: back up EDI
+mov edx, OFFSET msgfound
+call Writestring
+mov eax, 0
+sub edi,[ebp+16]
+mov eax, edi
+call Writedec
+jmp _exit
+quit:
+mov edx, OFFSET msgnotfound
+call WriteString
+_exit:
+pop ebp
+ret 12
+Scan_string ENDP
+END main
+
+Q2:
+TITLE Scan string
+INCLUDE Irvine32.inc
+.data
+Str1 BYTE "127&j~3#^&*#*#45^",0
+msgfound BYTE "Index of character found is: ", 0
+msgnotfound BYTE "Not found",0
+.code
+main PROC
+push OFFSET Str1 ; EDI points to the string
+push '#'          ; search for #
+call Scan_string
+call Crlf
+exit
+main ENDP
+
+Scan_string PROC 
+push ebp
+mov ebp, esp
+mov edi, [ebp+12]
+mov al, [ebp+8]
+mov ecx, LENGTHOF Str1
+Cld                 ; direction = forward
+repne scasb         ; repeat while not equal
+jnz quit            ; quit if letter not found
+dec edi             ; found: back up EDI
+mov edx, OFFSET msgfound
+call Writestring
+mov eax, 0
+sub edi,[ebp+12]
+mov eax, edi
+call Writedec
+jmp _exit
+quit:
+mov edx, OFFSET msgnotfound
+call WriteString
+_exit:
+pop ebp
+ret 8
+Scan_string ENDP
+END main
+
+Q3:
+TITLE Q3
+INCLUDE Irvine32.inc
+
+.data
+source BYTE "MARTIN "
+dest BYTE "MARTINEZ"
+str1 BYTE "Source is smaller",0
+str2 BYTE "Source is not smaller",0
+.code
+main PROC
+cld ; direction = forward
+mov esi,OFFSET source
+mov edi,OFFSET dest
+mov ecx,LENGTHOF source
+push esi
+push edi
+push ecx
+call IsCompare
+exit
+main ENDP
+
+IsCompare PROC
+push ebp
+mov ebp, esp
+mov esi, [ebp+16]
+mov edi, [ebp+12]
+mov ecx, [ebp+8]
+repe cmpsb
+jb source_smaller
+mov edx,OFFSET str2 ; "source is not smaller"
+jmp done
+source_smaller:
+mov edx,OFFSET str1 ; "source is smaller"
+done:
+call WriteString
+pop ebp
+ret 12
+IsCompare ENDP
+
+END main
+
+TITLE Q4
+INCLUDE Irvine32.inc
+.data
+inputStr BYTE "HELLO", 0      
+msg BYTE "Reversed string: ", 0
+.code
+main PROC
+mov edx, OFFSET inputStr
+call WriteString
+call CrLf
+push OFFSET inputStr        
+call Str_Reverse           
+
+mov edx, OFFSET msg
+call WriteString
+mov edx, OFFSET inputStr
+call WriteString
+call CrLf
+exit
+main ENDP
+
+Str_Reverse PROC
+    push ebp                   
+    mov ebp, esp                  
+
+    mov esi, [ebp+8]              
+    mov edi, esi            
+
+find_end:
+    cmp BYTE PTR [edi], 0       
+    je reverse_start              
+    inc edi                     
+    jmp find_end
+
+reverse_start:
+    dec edi             ; Move back to the last character
+reverse_loop:
+    cmp esi, edi        ; Check if pointers have crossed
+    jge reverse_done    ; If yes, reversing is complete
+
+    mov al, [esi]                
+    mov bl, [edi]                 
+    mov [esi], bl                
+    mov [edi], al             
+
+    inc esi               
+    dec edi                   
+    jmp reverse_loop          
+
+reverse_done:
+    pop ebp                       
+    ret 4                        
+Str_Reverse ENDP
+
+END main
+
+Q5:
+INCLUDE Irvine32.inc
+
+.data
+array DWORD 5, 10, 15, 20, 25
+msg BYTE "new array: ", 0
+
+.code
+
+Load PROC arr:DWORD, num:BYTE
+    mov esi, arr
+    movzx ebx, num
+l1:
+    mov eax, [esi]
+    imul eax, ebx
+    mov [esi], eax
+    add esi, 4
+    loop l1
+    ret
+Load ENDP
+
+main PROC
+    mov ecx, LENGTHOF array
+    INVOKE Load, ADDR array, 2 
+
+    mov edx, OFFSET msg
+    call WriteString
+
+    mov esi, OFFSET array
+    mov ecx, LENGTHOF array
+    
+print:
+    mov eax, [esi]
+    call WriteDec
+    mov al,' '
+    call writechar
+    add esi, 4
+    loop print
+
+    exit
+main ENDP
+
+END main
+
+Q6:
+INCLUDE Irvine32.inc
+
+.data
+target BYTE "AAEBDCFBBC", 0
+freqTable DWORD 256 DUP(0)
+
+.code
+Get_frequencies PROC targ:DWORD, freq :DWORD
+    cld
+    mov esi, targ
+    mov edi, freq
+
+    mov ecx,0
+
+count:
+    mov al, [esi + ecx]
+    test al, al
+    jz done
+
+    movzx eax, al      ;ascii val
+    inc dword ptr [edi + eax*4]
+
+    inc ecx
+    jmp count
+
+done:
+    ret
+Get_frequencies ENDP
+
+main PROC
+    INVOKE Get_frequencies, ADDR target, ADDR freqTable
+    mov edx,offset target
+    call writestring
+    call crlf
+    mov edi ,offset target
+    mov ecx, 0
+    print:
+        mov eax, [freqTable + ecx*4]
+        cmp eax, 0
+        je skip
+        mov eax, [freqTable + ecx*4]
+        call WriteDec
+        mov al,' '
+        call writechar
+
+
+    skip:
+        inc ecx
+        inc edi
+        cmp ecx, 256
+        jl print
+
+    exit
+main ENDP
+
+
+END main

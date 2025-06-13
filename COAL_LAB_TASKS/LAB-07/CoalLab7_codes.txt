@@ -1,0 +1,289 @@
+TASK 1:
+TITLE TASK 1
+INCLUDE Irvine32.inc
+.data
+arr WORD 10h,20h,30h,40h,50h,60h,70h,80h,90h,1Ah
+arr2 WORD 10 dup(?)
+
+.code
+main PROC
+mov eax, 0
+mov esi, OFFSET arr
+mov edi, OFFSET arr2
+mov ecx, LENGTHOF arr
+L1:
+mov al, [esi]
+push eax
+add esi, TYPE arr
+loop L1
+mov ecx, LENGTHOF arr
+L2:
+pop eax
+mov [edi], al
+add edi, TYPE arr2
+loop L2
+mov esi, OFFSET arr2
+mov ecx, LENGTHOF arr2
+L3:
+mov al, [esi]
+call WriteHex
+add esi, TYPE arr2
+call Crlf
+loop L3
+exit
+main ENDP
+END main
+
+push variable to stack by register method
+TASK 2:
+INCLUDE Irvine32.inc
+.data
+var1 DWORD 3h
+var2 DWORD 2h
+var3 DWORD 1h
+.code
+main PROC
+mov eax, 0
+mov eax, [var1]
+push eax
+mov eax, [var2]
+push eax
+mov eax, [var3]
+push eax
+call AddSum
+call WriteHex
+call DumpRegs
+exit
+main ENDP
+AddSum PROC
+mov eax, 0
+push ebp
+mov ebp, esp
+add eax, [ebp+8]
+add eax, [ebp+12]
+add eax, [ebp+16]
+pop ebp
+ret 
+AddSum ENDP
+END main
+
+directly pushing variables onto stack
+TASK 2:
+TITLE TASK 2
+INCLUDE Irvine32.inc
+.data
+var1 DWORD 3h
+var2 DWORD 2h
+var3 DWORD 1h
+.code
+main PROC
+push var1
+push var2
+push var3
+call AddSum
+call WriteHex
+call DumpRegs
+exit
+main ENDP
+AddSum PROC
+mov eax, 0
+push ebp
+mov ebp, esp
+add eax, [ebp+8]
+add eax, [ebp+12]
+add eax, [ebp+16]
+pop ebp
+ret 12
+AddSum ENDP
+END main
+
+TASK3:
+TITLE TASK 3
+INCLUDE Irvine32.inc
+.data
+    arr1 word 1,2,3,4,5
+    arr2 word 6,7,8,9,10
+    sum1 word 0
+    sum2 word 0
+    totalSum word 0
+    total BYTE "The total sum of both arrays (arr1+arr2) is: ",0
+.code
+; Nested Procedures main ->sumArr1 -> sumArr2 -> addSum ->ret
+
+main PROC
+    call sumArr1
+    mov edx, OFFSET total
+    call WriteString
+    mov ax, totalSum
+    call WriteDec
+    call Crlf
+    exit
+main ENDP
+
+sumArr1 PROC
+    mov esi, OFFSET arr1
+    mov ecx, LENGTHOF arr1
+    mov eax,0
+    l1:
+        add ax, [esi]
+        add esi, 2
+        loop l1
+    mov sum1, ax
+
+    call sumArr2
+
+    ret
+sumArr1 ENDP
+
+sumArr2 PROC
+    mov esi, OFFSET arr2
+    mov ecx, LENGTHOF arr2
+    mov eax,0
+    l1:
+        add ax, [esi]
+        add esi, 2
+        loop l1
+    mov sum2, ax
+
+    call AddSum
+
+    ret
+sumArr2 ENDP
+
+AddSum PROC
+    mov ax, sum1
+    add ax, sum2
+    mov totalSum, ax
+    ret
+AddSum ENDP
+
+END main
+
+TASK 4:
+TITLE TASK 4
+INCLUDE Irvine32.inc
+.data
+numcolumns DWORD ?
+.code
+main PROC
+mov [numcolumns], 5
+call PrintPattern
+exit 
+main ENDP
+
+PrintPattern PROC
+mov ecx, 1
+L1:
+push ecx
+mov edx, [numcolumns]
+sub edx, ecx
+  printspaces:
+  cmp edx, 0
+  je printstars
+  mov al, ' '
+  call WriteChar
+  dec edx
+  jmp printspaces
+     printstars:
+     mov ebx, ecx
+        printstarloop:
+        mov al, '*'
+        call WriteChar
+        dec ebx
+        jnz printstarloop
+     call Crlf
+pop ecx
+inc ecx
+cmp ecx, [numcolumns]
+jle L1
+ret
+PrintPattern ENDP
+
+END main
+
+TASK5:
+TITLE PRINT PATTERN
+INCLUDE Irvine32.inc
+.data
+numcolumns DWORD ?
+index DWORD 0
+arr BYTE "ABCDEFGHIJKLMNOPQRSTUVWXYZ",0
+.code
+main PROC
+mov [numcolumns], 5
+push numcolumns
+call PrintPattern
+exit 
+main ENDP
+PrintPattern PROC
+mov esi, OFFSET arr
+push ebp
+mov ebp, esp
+mov ecx, 1
+mov al, 'A'
+L1:
+push ecx
+mov edx, [ebp+8]
+sub edx, ecx
+    printspaces:
+    cmp edx, 0
+    je printstars
+    mov al, ' '
+    call WriteChar
+    dec edx
+    jmp printspaces
+        printstars:
+        mov ebx, ecx
+            printstarloop:
+            mov al, [esi]
+            call WriteChar
+            inc esi
+            dec ebx
+            jnz printstarloop
+call Crlf
+pop ecx
+inc ecx
+cmp ecx, [ebp+8]
+jle L1
+pop ebp
+ret
+PrintPattern ENDP
+
+END main
+
+TASK 6:
+TITLE TASK 6
+INCLUDE Irvine32.inc
+.data
+n DWORD ?
+sum DWORD 0
+msg BYTE "Enter value of n: ",0
+total BYTE "The sum of 1 to n numbers is: ",0
+.code
+main PROC
+mov eax, 0
+mov edx, OFFSET msg
+call WriteString
+call Crlf
+call Readint
+mov [n], eax
+call Sum1TON
+mov edx, OFFSET total
+call WriteString
+mov [sum], eax
+call WriteDec
+call DumpRegs
+exit
+main ENDP
+
+Sum1TON PROC
+mov eax, 0               
+mov ecx, [n]
+L1:
+add eax, ecx
+dec ecx
+jnz L1
+mov [sum], eax
+ret
+Sum1TON ENDP
+END main

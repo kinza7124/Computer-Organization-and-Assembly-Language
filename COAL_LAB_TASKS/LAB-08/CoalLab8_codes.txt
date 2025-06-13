@@ -1,0 +1,374 @@
+TITLE LAB 8 Q1
+INCLUDE Irvine32.inc
+.data
+var1 BYTE ?
+var2 BYTE ?
+var3 BYTE ?
+var4 BYTE ?
+msg1 BYTE "Input integer: ",0
+msgequal BYTE "All are equal.",0
+msgnotequal BYTE "All are not equal.",0
+.code
+main PROC
+mov eax, 0
+mov edx, OFFSET msg1
+call WriteString
+call Crlf
+call ReadInt
+mov [var1], al
+mov edx, OFFSET msg1
+call WriteString
+call Crlf
+call ReadInt
+mov [var2], al
+mov edx, OFFSET msg1
+call WriteString
+call Crlf
+call ReadInt
+mov [var3], al
+mov edx, OFFSET msg1
+call WriteString
+call Crlf
+call ReadInt
+mov [var4], al
+
+mov al, [var1]
+cmp al, [var2]
+jne notequal
+
+mov al, [var2]
+cmp al, [var3]
+jne notequal
+
+mov al, [var3]
+cmp al, [var4]
+je allequal
+
+allequal:
+mov edx, OFFSET msgequal
+call WriteString
+jmp _exit
+
+notequal:
+mov edx, OFFSET msgnotequal
+call WriteString
+
+_exit:
+call DumpRegs
+exit
+main ENDP
+END main
+
+TITLE LAB 8 Q2
+INCLUDE Irvine32.inc
+.data
+intArr SWORD 0,0,0,150,120,35,-12,66,4,0
+msgfound BYTE "First non zero value found: ",0
+.code
+main PROC
+mov eax, 0
+mov esi, OFFSET intArr
+mov ecx, LENGTHOF intArr
+L1:
+mov ax, [esi]
+cmp ax, 0
+je continueloop
+mov edx, OFFSET msgfound
+call WriteString
+mov eax, ax
+call WriteDec
+jmp _exit
+
+continueloop:
+add esi, 2
+loop L1
+
+_exit:
+call DumpRegs
+exit
+main ENDP
+END main
+
+TITLE LAB 8 Q3
+INCLUDE Irvine32.inc
+.data
+intArr SWORD 0,0,0,150,120,35,-12,66,4,0
+var DWORD ?
+msg BYTE "The value of x is: ",0
+x BYTE ?
+.code
+main PROC
+mov [var], 5
+mov eax, 0
+mov esi, OFFSET intArr
+mov ecx, LENGTHOF intArr
+mov eax, [var]
+inc eax
+mov edx, eax
+
+cmp [var], ecx
+jb condition2
+jmp printx1
+
+condition2:
+cmp ecx, edx
+jae printx
+jmp printx1
+
+printx:
+mov BYTE PTR [x], 0
+jmp _exit
+
+printx1:
+mov BYTE PTR [x], 1
+jmp _exit
+
+_exit:
+mov edx, OFFSET msg
+call WriteString
+mov eax, 0
+mov al, [x]
+call WriteDec
+call DumpRegs
+exit
+main ENDP
+END main
+
+TITLE LAB 8 Q4
+INCLUDE Irvine32.inc
+.data
+var DWORD ?
+msg1 BYTE "Hello",0
+msg2 BYTE "World",0
+.code
+main PROC
+mov eax, 0
+mov [var], eax
+
+whileloop:
+mov eax, [var]
+cmp eax, 10
+ja endwhile
+cmp eax, 5
+jae printworld
+mov edx, OFFSET msg1
+call WriteString
+call Crlf
+jmp incvar
+printworld:
+mov edx, OFFSET msg2
+call WriteString
+call Crlf
+
+incvar:
+inc DWORD PTR [var]
+jmp whileloop
+
+endwhile:
+call DumpRegs
+exit
+main ENDP
+END main
+
+TITLE LAB 8 Q5
+INCLUDE Irvine32.inc
+.data
+msg BYTE "Enter the value to search: ",0
+arr WORD 10,4,7,14,299,156,3,19,29,300,20
+tosearch WORD ?
+foundmsg BYTE "Value found.",0
+notfoundmsg BYTE "Value not found.",0
+.code
+main PROC
+mov eax, 0
+mov edx, OFFSET msg
+call WriteString
+call ReadInt
+mov [tosearch], ax
+mov bx, [tosearch]
+mov esi, OFFSET arr
+mov ecx, LENGTHOF arr
+mov eax, 0
+L1:
+mov ax, [esi]
+cmp ax, bx
+je found
+add esi, 2
+loop L1
+jmp notfound
+found:
+mov edx, OFFSET foundmsg
+call WriteString
+jmp _exit
+
+notfound:
+mov edx, OFFSET notfoundmsg
+call WriteString
+jmp _exit
+
+_exit:
+exit
+main ENDP
+END main
+
+TASK 6:
+TITLE Sorting an Array
+INCLUDE Irvine32.inc
+.data
+arr WORD 1, 4, 2, 3, 6, 5, 10, 8   
+swap BYTE 0                
+
+.code
+main PROC
+mov eax, 0
+    mov ecx, LENGTHOF arr         
+
+outerloop:
+    mov [swap], 0                 
+    mov esi, OFFSET arr           
+innerloop:
+    mov ax, [esi]                
+    mov dx, [esi + 2]            
+    cmp ax, dx
+    jbe noswap    ; Skip if in order
+
+    ;swap
+    mov WORD PTR [esi], dx       
+    mov WORD PTR [esi + 2], ax   
+    mov [swap], 1   ; Indicate a swap occurred
+
+noswap:
+    add esi, 2                   
+    cmp esi, OFFSET arr + (LENGTHOF arr - 1) * 2
+    jl innerloop                 
+
+    cmp [swap], 1
+    je outerloop                   
+    mov esi, OFFSET arr          
+    mov ecx, LENGTHOF arr        
+    mov eax, 0
+printloop:
+    mov ax, [esi]             
+    call WriteDec
+    call Crlf                   
+    add esi, 2                
+    loop printloop
+    exit
+main ENDP
+END main
+
+TITLE LAB 8 Q7
+INCLUDE Irvine32.inc
+.data
+msg1 BYTE "MONDAY",0
+msg2 BYTE "TUESDAY",0
+msg3 BYTE "WEDNESDAY",0
+msg4 BYTE "THURSDAY",0
+msg5 BYTE "FRIDAY",0
+msg6 BYTE "SATURDAY",0
+msg7 BYTE "SUNDAY",0
+msg8 BYTE "INVALID",0
+number BYTE 6
+.code
+main PROC
+mov al, [number]
+
+cmp al, 1
+jne tues
+mov edx, OFFSET msg1
+call WriteString
+jmp _exit
+
+tues:
+cmp al, 2 
+jne wed
+mov edx, OFFSET msg2
+call WriteString
+jmp _exit
+
+wed:
+cmp al, 3
+jne thurs
+mov edx, OFFSET msg3
+call WriteString
+jmp _exit
+
+thurs:
+cmp al, 4
+jne fri
+mov edx, OFFSET msg4
+call WriteString
+jmp _exit
+
+fri:
+cmp al,5
+jne sat
+mov edx, OFFSET msg5
+call WriteString
+jmp _exit
+
+sat:
+cmp al, 6
+jne sun
+mov edx, OFFSET msg6
+call WriteString
+jmp _exit
+
+sun:
+cmp al, 7
+jne invalid
+mov edx, OFFSET msg7
+call WriteString
+jmp _exit
+
+invalid:
+mov edx, OFFSET msg8
+call WriteString
+call Crlf
+
+_exit:
+exit
+main ENDP
+END main
+
+TITLE LAB 8 Q8
+INCLUDE Irvine32.inc
+.data
+msg BYTE "Enter a character: ",0
+msgAlpha BYTE "The character is an alphabet.", 0
+msgNotAlpha BYTE "The character is NOT an alphabet.", 0
+char BYTE ?
+.code
+main PROC
+mov eax, 0
+mov edx, OFFSET msg
+call WriteString
+call ReadChar
+mov [char], al  
+call Crlf
+mov al,[char]
+
+cmp al, 'A'
+jl lowercasecheck
+cmp al, 'Z'
+jle isalpha
+
+lowercasecheck:
+cmp al, 'a'
+jl notalpha
+cmp al, 'z'
+jg notalpha
+
+isalpha:
+mov edx, OFFSET msgAlpha
+call WriteString
+jmp _exit
+
+notalpha:
+mov edx, OFFSET msgNotAlpha
+call WriteString
+_exit:
+exit
+main ENDP
+END main
+

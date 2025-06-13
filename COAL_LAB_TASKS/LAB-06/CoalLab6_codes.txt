@@ -1,0 +1,287 @@
+TASK 1:
+TITLE Fibonacci sequence
+INCLUDE Irvine32.inc
+.code
+main PROC
+    mov eax, 1              
+    mov ebx, 1              
+    call DumpRegs
+
+    call DumpRegs
+    mov ecx, 8
+
+fibloop:
+    mov edx, eax            
+    add eax, ebx
+    mov ebx, edx       
+    call DumpRegs
+    dec ecx
+    jnz fibloop
+
+    exit
+main ENDP
+END main
+
+TASK2:
+TITLE to print the pattern
+INCLUDE Irvine32.inc
+.data
+numlines DWORD 4
+.code
+main PROC 
+mov ecx, numlines
+mov ebx, numlines
+        outerloop:
+             mov edx, ebx
+             mov esi, 1
+                  innerloop:
+                       mov eax, esi
+                       call WriteDec
+                       inc esi
+                       dec edx
+                       jnz innerloop
+            call Crlf 
+            dec ebx
+            loop outerloop
+exit
+main ENDP
+END main
+
+TITLE to print the pattern
+INCLUDE Irvine32.inc
+.data
+numlines DWORD 4
+.code
+main PROC 
+mov ecx, numlines
+mov ebx, numlines
+        outerloop:
+             mov edx, ebx
+             mov esi, 1
+                  innerloop:
+                       mov eax, esi
+                       call WriteDec
+                       dec edx
+                       jnz innerloop
+            call Crlf 
+            dec ebx
+            loop outerloop
+exit
+main ENDP
+END main
+
+TITLE to print the pattern
+INCLUDE Irvine32.inc
+.data
+numlines DWORD 4
+.code
+main PROC 
+mov ecx, numlines
+mov ebx, numlines
+        outerloop:
+             mov edx, ebx
+             mov esi, 4
+                  innerloop:
+                       mov eax, esi
+                       call WriteDec
+                       dec esi
+                       dec edx
+                       jnz innerloop
+            call Crlf 
+            dec ebx
+            loop outerloop
+exit
+main ENDP
+END main
+
+INCLUDE Irvine32.inc
+.data
+numlines DWORD 4
+.code
+main PROC 
+mov ecx, numlines
+mov ebx, 1
+        outerloop:
+             mov edx, ebx
+             mov esi, 1
+                  innerloop: 
+                      mov eax, esi
+                       call WriteDec
+                       dec edx
+                       jnz innerloop
+            call Crlf 
+            inc ebx
+            cmp ebx, numlines
+            jbe outerloop
+exit
+main ENDP
+END main
+
+TASK 3:
+TITLE Employee Data Input and Salary Calculation
+INCLUDE Irvine32.inc
+.data
+empid DWORD 5 DUP(?)
+namm DWORD 5 DUP(?)
+yrofbirth DWORD 5 DUP(?)
+annualsal DWORD 5 DUP(?)
+msg1 BYTE "Enter ID",0
+msg2 BYTE "Enter Name",0
+msg3 BYTE "Enter year of birth",0
+msg4 BYTE "Enter annual salary",0
+TotalSalary DWORD ?
+
+.code
+main PROC
+mov ecx, 5
+mov ebx, 0
+L1:
+mov edx,offset msg1
+call writeString
+call crlf
+call readint
+mov [empid+ebx],eax
+
+mov edx,offset msg2
+call writeString
+call crlf
+mov edx,offset namm
+call readstring
+
+mov edx,offset msg3
+call writeString
+call crlf
+mov edx,offset yrofbirth
+call readstring
+mov [yrofbirth+ ebx],eax
+
+mov edx,offset msg4
+call writeString
+call crlf
+call readint
+mov [annualsal+ebx],eax
+
+add ebx, 4
+loop L1
+
+mov ecx, 5         
+    mov eax, 0                       
+    mov esi, OFFSET annualsal     
+
+salaryloop:
+    add eax, [esi]                   
+    add esi, 4                       
+    loop salaryloop 
+    
+    mov TotalSalary, eax
+
+    mov edx, TotalSalary           
+    call WriteDec                  
+    call Crlf                     
+
+    exit
+    main ENDP
+    END main
+
+TASK 4:
+TITLE Copying a String
+INCLUDE Irvine32.inc
+.data
+source BYTE "This is me Kinza",0
+target BYTE SIZEOF source DUP(0)
+.code
+main PROC
+mov esi, 0
+mov ecx, SIZEOF source
+L1:
+    mov al, source[esi]
+    mov target[esi], al
+    inc esi
+    loop L1
+    mov edx, OFFSET target
+    call WriteString
+exit
+main ENDP
+END main
+
+TASK 5:
+TITLE Reverse an array
+INCLUDE Irvine32.inc
+.data
+arr DWORD 1, 2, 3, 4, 5, 6, 7, 8         
+arrsize = SIZEOF arr                    
+elementsize = TYPE arr                    
+arrcount = LENGTHOF arr
+
+.code
+main PROC
+    mov esi, OFFSET arr                   
+    mov edi, OFFSET arr                   
+    add edi, arrsize - elementsize
+reverse_loop:
+    cmp esi, edi                         
+    jge done                              
+
+    mov eax, [esi]                       
+    mov ebx, [edi]                      
+    mov [esi], ebx                      
+    mov [edi], eax              
+    add esi, elementsize                  
+    sub edi, elementsize                 
+
+    jmp reverse_loop                     
+
+done:
+    mov esi, OFFSET arr                   
+    mov ecx, arrcount                   
+    printloop:
+    mov eax, [esi]                        
+    call WriteDec                         
+    call Crlf                           
+    add esi, elementsize                
+    loop printloop                       
+
+    exit
+main ENDP
+END main
+
+TASK 6:
+TITLE Sorting an Array
+INCLUDE Irvine32.inc
+.data
+arr DWORD 8,5,1,2,6
+swap BYTE 0
+
+.code
+main PROC
+ mov ecx, LENGTHOF arr 
+      outerloop:
+            mov [swap], 0
+            mov ebx, 0
+        innerloop:
+        mov eax, [arr+ebx]
+        mov edx, [arr+ebx+4]
+        cmp eax, edx
+        jbe noswap
+        ;swap
+       mov [arr + ebx], edx       
+       mov [arr + ebx + 4], eax     
+       mov [swap], 1
+    noswap:
+    add ebx, 4
+    cmp ebx, (LENGTHOF arr - 1) * 4
+    jl innerloop
+    cmp [swap], 1
+    je outerloop
+
+    mov esi, OFFSET arr
+    mov ecx, LENGTHOF arr
+    printloop:
+    mov eax, [esi]
+    call WriteDec
+    call Crlf
+    add esi, 4
+    loop printloop
+exit
+main ENDP
+END main

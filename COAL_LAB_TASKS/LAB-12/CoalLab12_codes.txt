@@ -1,0 +1,80 @@
+TASK NO:01
+
+C++ code:
+#include<iostream>
+using namespace std;
+extern "C" void ThreeProd(); // Declare the assembly function
+int main()
+{
+	int n1, n2, n3, res;
+	cout << "Enter 3 integers: ";
+	cin >> n1 >> n2 >> n3;
+	_asm
+	{
+		mov eax, n1
+		mov ebx, n2
+		mov ecx, n3
+		call ThreeProd;
+		mov res, eax
+	}
+	cout << "Product of 3 numbers: " << res << endl;
+}
+ASSEMBLY CODE:
+
+.686 ;Target processor. Use instructions for Pentium class machines
+.MODEL FLAT, C ;Use the flat memory model. Use C calling conventions
+.STACK 2048 ;Define a stack segment of 1KB (Not required for this example
+.DATA
+.CODE ;Indicates the start of a code segment
+ThreeProd PROC
+imul eax, ebx
+imul eax, ecx
+ret
+ThreeProd ENDP
+END
+
+TASK NO:02
+
+C++ CODE:
+#include<iostream>
+using namespace std;
+extern "C" void GCD(); // Declare the assembly function
+int main()
+{
+	int n1, n2, gcd;
+	cout << "Enter 2 integers: ";
+	cin >> n1 >> n2;
+	_asm
+	{
+		mov eax, n1
+		mov ebx, n2
+		call GCD;
+		mov gcd, eax
+	}
+	cout << "GCD of 2 numbers: " << gcd << endl;
+}
+
+ASSEMBLY CODE:
+.686 ;Target processor. Use instructions for Pentium class machines
+.MODEL FLAT, C ;Use the flat memory model. Use C calling conventions
+.STACK 2048 ;Define a stack segment of 1KB (Not required for this example
+.DATA
+.CODE ;Indicates the start of a code segment
+GCD PROC
+;if both nos equal, GCD will be that number
+cmp eax, ebx
+je done
+loop_start:
+mov edx, 0 ; Clear edx
+idiv ebx ; eax = eax / ebx, edx = remainder
+; Now, set eax = ebx and ebx = remainder (edx)
+mov eax, ebx ; Move old divisor to eax
+mov ebx, edx ; Move remainder to ebx
+; If remainder is 0, GCD is in eax
+test ebx, ebx ; Check if remainder (ebx) is 0
+jnz loop_start
+done:
+; eax now contains the GCD
+ret
+GCD ENDP
+END

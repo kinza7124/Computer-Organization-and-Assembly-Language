@@ -1,0 +1,454 @@
+TASK 1:
+INCLUDE Irvine32.inc
+.data
+num DWORD ?
+msg BYTE "Enter a number: ",0
+msg1 BYTE "The value of eax after calculation is: ",0
+cal DWORD ?
+.code
+main PROC
+ ; EAX * (2^4 + 2^3 + 2^0)
+ mov eax, 0
+mov edx, OFFSET msg
+call WriteString
+call Crlf
+call ReadInt
+mov [num], eax
+mov edx, eax
+mov ebx, eax
+shl edx, 4 ; EDX*2^4
+shl ebx, 3 ; EBX *2^3
+shl eax, 0 ; EAX*2^0
+add eax, ebx
+add eax, edx
+mov [cal], eax
+mov edx, OFFSET msg1
+call WriteString
+mov eax, [cal]
+call WriteDec
+call DumpRegs
+exit
+main ENDP
+END main
+
+TASK2:
+INCLUDE Irvine32.inc
+.code
+main PROC
+mov bx, -128
+movsx ebx, bx
+shl ebx, 16
+sar ebx, 16
+mov eax, ebx
+call DumpRegs
+exit
+main ENDP
+END main
+
+EQUIVALENT:
+INCLUDE Irvine32.inc
+.code
+main PROC
+ mov bx, -128       
+ shl ebx, 16          
+    ror ebx, 16    
+    or ebx, 0FFFF0000h  
+    mov eax, ebx
+call DumpRegs
+exit
+main ENDP
+END main
+
+TASK3:
+TITLE EXTRACTING MINUTES
+INCLUDE Irvine32.inc
+.data
+   bMinutes BYTE ?
+   msg2 BYTE "The minutes are: ",0
+   timestamp WORD 0010011001101010b
+.code
+main PROC
+   mov dx, [timestamp]
+   mov ax, dx
+   shr ax, 5
+   and ax, 00111111b
+   mov [bMinutes], al
+   mov edx, OFFSET msg2
+   call WriteString
+movzx eax, [bMinutes]
+call WriteDec
+call DumpRegs                
+exit
+main ENDP
+END main
+
+TASK 4:
+INCLUDE Irvine32.inc
+.data
+msg1 BYTE "using shrd : ", 0
+msg2 BYTE "without using shrd : ", 0
+
+.code
+main PROC
+
+mov eax, 0
+mov ebx, 0
+
+mov ax, 1111000011110000b
+mov bx, 0000111100001111b
+
+shr bx, 1
+rcr ax, 1
+
+mov edx, OFFSET msg2
+call writestring
+call writebin
+
+call crlf
+call crlf
+
+mov edx, OFFSET msg1
+call writestring
+
+mov ax, 1111000011110000b
+mov bx, 0000111100001111b
+
+shrd ax, bx, 1
+call writebin
+
+call Crlf
+
+exit
+main ENDP
+END main
+
+TASK 5:
+TITLE Expression
+INCLUDE Irvine32.inc
+.data
+   val1 SDWORD 2
+   val2 SDWORD 2
+   val3 SDWORD 1
+   quotient2 SDWORD ?
+   quotient1 SDWORD ?
+
+.code
+main PROC
+  mov eax, [val1]
+  cdq
+  mov ebx, [val2]
+  idiv ebx 
+  mov [quotient2], eax
+
+   mov eax, [val2]
+   cdq
+  mov ebx, [val3]
+  idiv ebx
+  mov [quotient1], eax
+
+  mov eax, [quotient1]
+  mov ebx, [quotient2]
+  imul ebx
+  mov [val1], eax
+  call WriteDec
+
+call DumpRegs                
+exit
+main ENDP
+END main
+
+TASK 6:
+TITLE 64-bit Integer Addition
+INCLUDE Irvine32.inc
+
+.data
+   num1_low  DWORD 12345678h      
+   num1_high DWORD 0ABCDEF0h       
+   num2_low  DWORD 11111111h      
+   num2_high DWORD 22222222h       
+   result_low  DWORD ?              
+   result_high DWORD ?           
+   
+   msg1 BYTE "Result (64-bit): ", 0
+   msg_high BYTE "High part: ", 0
+   msg_low BYTE "Low part: ", 0
+.code
+main PROC
+   call Extended_Add 
+    ; Print high part
+   mov edx, OFFSET msg_high
+   call WriteString                
+   mov eax, [result_high]        
+   call WriteHex                  
+   ; Print low part
+   call Crlf
+   mov edx, OFFSET msg_low
+   call WriteString               
+   mov eax, [result_low]          
+   call WriteHex                   
+   call DumpRegs                  
+   exit
+main ENDP
+Extended_Add PROC
+   ; Step 1: Add the lower 32 bits
+   mov eax, [num1_low]           
+   add eax, [num2_low]            
+   mov [result_low], eax          
+   jc carry_flag                 ; If carry is set, jump to handle carry
+
+   ; Step 2: Add the higher 32 bits without carry
+   mov eax, [num1_high]          
+   add eax, [num2_high]          
+   mov [result_high], eax         
+   jmp end_add                     ; Skip the carry handler
+
+carry_flag:
+   ; Step 3: Handle carry for higher 32 bits
+   mov eax, [num1_high]            
+   adc eax, [num2_high]            ; Add with carry to account for overflow
+   mov [result_high], eax          ; Store result's upper 32 bits with carry handled
+end_add:
+   ret                        
+Extended_Add ENDP
+END main
+
+TASK 6:
+INCLUDE Irvine32.inc
+.data
+op1 QWORD 0A2B2A40674981234h
+op2 QWORD 08010870000234502h
+sum DWORD 3 dup(?)
+.code
+main PROC
+mov esi, OFFSET op1
+mov edi, OFFSET op2
+mov ebx, OFFSET sum
+mov ecx, 2
+call Extended_Add
+mov ecx, 3
+mov esi, OFFSET sum
+add esi, SIZEOF sum
+sub esi, 4
+
+l2:
+mov eax, [esi]
+call writehex
+sub esi, 4
+loop l2
+exit
+main ENDP
+Extended_Add PROC
+l1:
+mov eax, [esi]
+adc eax, [edi]
+pushfd
+mov [ebx], eax
+add esi, 4
+add edi, 4
+add ebx, 4
+popfd
+loop l1
+
+adc word ptr [ebx], 0
+ret
+Extended_Add ENDP
+END main
+
+TASK 7:
+Unoptimized approach:
+INCLUDE Irvine32.inc
+.data
+num DWORD ?
+count DWORD 0
+msg BYTE "Enter a number: ",0
+msgprime BYTE "The number is prime.",0
+msgnotprime BYTE "The number is not prime.",0
+.code
+main PROC
+mov eax, 0
+L1:
+mov edx, OFFSET msg
+call WriteString
+call Crlf
+call ReadInt
+mov [num], eax
+cmp [num], 1
+je _exit
+mov eax, [num]
+call isPrime
+jnz display_notprime        ; If Zero flag is not set, number is not prime
+mov edx, OFFSET msgprime
+call WriteString
+call Crlf
+jmp L1
+
+display_notprime:
+mov edx, OFFSET msgnotprime
+call WriteString
+call Crlf
+jmp L1
+_exit:
+exit
+main ENDP
+
+isPrime PROC
+cmp eax, 1
+jle notprime
+mov [count], 0
+mov ecx, 1
+mov ebx, eax
+L2:
+mov eax, ebx
+cdq
+div ecx
+cmp edx, 0 ; if remainder is zero
+jne next
+inc [count]
+next:
+inc ecx
+cmp ecx, ebx
+jle L2
+
+cmp [count], 2
+ja notprime
+jmp prime
+
+notprime:
+mov eax, 1
+jmp _ex
+prime:
+xor eax, eax ; This sets the zero flag
+
+_ex:
+ret
+isPrime ENDP
+END main
+
+Optimized approach:
+INCLUDE Irvine32.inc
+.data
+num DWORD ?
+count DWORD 0
+msg BYTE "Enter a number: ",0
+msgprime BYTE "The number is prime.",0
+msgnotprime BYTE "The number is not prime.",0
+.code
+main PROC
+mov eax, 0
+L1:
+mov edx, OFFSET msg
+call WriteString
+call Crlf
+call ReadInt
+mov [num], eax
+cmp [num], 1
+je _exit
+mov eax, [num]
+call isPrime
+jnz display_notprime        ; If Zero flag is not set, number is not prime
+mov edx, OFFSET msgprime
+call WriteString
+call Crlf
+jmp L1
+
+display_notprime:
+mov edx, OFFSET msgnotprime
+call WriteString
+call Crlf
+jmp L1
+_exit:
+exit
+main ENDP
+
+isPrime PROC
+cmp eax, 2
+je prime 
+jl notprime
+mov [count], 0
+mov ecx, 2
+mov ebx, eax
+L2:
+mov eax, ecx
+imul eax, ecx     ; Calculate ecx * ecx
+cmp eax, ebx           
+jg check           ; If ecx^2 > number, it is prime
+mov eax, ebx
+cdq
+div ecx
+cmp edx, 0 ; if remainder is zero
+jne next
+inc [count]
+next:
+inc ecx
+jmp L2
+
+check:
+cmp [count], 0
+ja notprime
+jmp prime
+
+notprime:
+mov eax, 1
+jmp _ex
+prime:
+xor eax, eax ; this sets the zero flag
+
+_ex:
+ret
+isPrime ENDP
+END main
+
+TASK 8:
+INCLUDE Irvine32.inc
+.data
+key BYTE 2, 4, 1, 0, 3, 5, 2, 4, 4, 6
+plaintext BYTE "Hello world", 0
+encrypted BYTE 50 dup(0)
+.code
+main PROC
+mov esi, OFFSET plaintext
+mov edi, OFFSET encrypted
+mov ecx, 50
+mov ebx, 0
+encryptionLoop:
+mov al, byte ptr [esi]
+cmp al, 0
+je done
+mov dl, byte ptr [key + ebx]
+call rotateByte
+mov [edi], al
+inc esi
+inc edi
+inc ebx
+cmp ebx, 10
+jl encryptionLoop
+
+mov ebx, 0
+loop encryptionLoop
+
+done:
+mov edx, OFFSET encrypted
+call writestring
+exit
+main ENDP
+
+rotateByte proc
+mov cl, dl
+cmp dl, 0
+jge rotateRight
+neg dl
+
+mov cl, dl
+shl al, cl
+rol al, cl
+ret
+rotateRight:
+mov cl, dl
+mov dl, cl
+shr al, cl
+mov cl, dl
+rol al, cl
+ret
+rotateByte ENDP
+
+END main

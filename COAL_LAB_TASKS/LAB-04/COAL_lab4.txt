@@ -1,0 +1,145 @@
+LAB4 Q2
+INCLUDE Irvine32.inc
+.code
+main PROC
+movzx eax 4B494Eh
+
+call DumpRegs
+exit
+main ENDP
+END main
+
+LAB4 Q3
+INCLUDE Irvine32.inc
+.data
+varB BYTE 10
+varW WORD -150
+varD DWORD 600
+.code
+main PROC
+movzx eax, varB
+movsx ebx, varW
+mov ecx, varD
+call DumpRegs
+exit
+main ENDP
+END main
+
+LAB4 Q4
+part i:
+INCLUDE Irvine32.inc
+.code
+main PROC
+mov eax, 89
+add eax, 075Fh
+sub eax, 46o
+sub eax, 28
+add eax, 1101b
+call DumpRegs
+exit 
+main ENDP
+END main
+
+part ii:
+INCLUDE Irvine32.inc
+.data
+val1 DWORD 25h
+val2 BYTE 36o
+val3 WORD 20d
+.code
+main PROC
+mov eax, val1
+movzx ebx, val2
+movzx ecx, val3
+add eax, ebx
+add eax, ecx
+sub eax, 654h
+call DumpRegs
+exit 
+main ENDP
+END main
+
+LAB4 Q6
+INCLUDE Irvine32.inc
+.code
+main PROC
+mov eax, 0
+SecondsInDay = 24*60*60
+mov eax, SecondsInDay
+call DumpRegs
+exit 
+main ENDP
+END main
+
+LAB4 Q7
+INCLUDE Irvine32.inc
+.data
+A DWORD 0FF10h
+B DWORD 0E10Bh
+
+.code
+main PROC
+mov eax, A
+mov ebx, B
+xchg eax, ebx
+mov A, eax
+mov B, ebx
+
+Call DumpRegs
+exit
+main ENDP
+END main
+
+LAB4 Q8
+part i:
+INCLUDE Irvine32.inc
+.data
+val1 BYTE 10h
+val2 WORD 8000h
+val3 DWORD 0FFFFh
+val4 WORD 7FFFh
+
+.code
+main PROC
+inc val2
+
+Call DumpRegs
+exit
+main ENDP
+END main
+
+partii:
+INCLUDE Irvine32.inc
+.data
+val1 BYTE 10h
+val2 WORD 8000h
+val3 DWORD 0FFFFh
+val4 WORD 7FFFh
+
+.code
+main PROC
+mov eax, 0
+sub eax, val3
+Call DumpRegs
+exit
+main ENDP
+END main
+
+part iii:
+INCLUDE Irvine32.inc
+.data
+val1 BYTE 10h
+val2 WORD 8000h
+val3 DWORD 0FFFFh
+val4 WORD 7FFFh
+
+.code
+main PROC
+mov ax, val2
+mov bx, val4
+sub ax, bx
+mov val2, ax
+Call DumpRegs
+exit
+main ENDP
+END main

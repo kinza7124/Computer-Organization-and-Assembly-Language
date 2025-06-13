@@ -1,0 +1,295 @@
+TASK 1:
+INCLUDE Irvine32.inc
+.data
+n1 DWORD 1
+n2 DWORD 2
+n3 DWORD 3
+msg BYTE "The sum of three numbers is: ",0
+.code
+main PROC
+mov eax, 0
+push n1
+push n2
+push n3
+call SumThree
+exit
+main ENDP
+SumThree PROC
+push ebp
+mov ebp, esp
+mov eax, 0
+add eax, [ebp+8]
+add eax, [ebp+12]
+add eax, [ebp+16]
+mov edx, OFFSET msg
+call WriteString
+call WriteDec
+pop ebp
+ret 
+SumThree ENDP
+END main
+
+TASK 2:
+INCLUDE Irvine32.inc
+
+.data
+array DWORD 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150 
+arraySize DWORD 15        
+sum DWORD 0    
+average DWORD 0           
+
+.code
+main PROC
+    
+    mov esi,OFFSET array         
+    mov ecx, arraySize  
+    call ArrayAvg   
+    mov eax, average     
+    call WriteDec          
+    call Crlf
+
+    exit                   
+main ENDP
+
+ArrayAvg PROC
+    push eax               
+    push edx
+    mov eax, 0          
+    mov edx, 0            
+loop_start:
+    add eax, [esi]        
+    add esi, 4          
+    loop loop_start        
+    mov sum, eax 
+    mov eax, sum   
+    mov ecx, arraySize  
+    div ecx  
+    mov average, eax  
+
+    pop edx              
+    pop eax
+    ret
+ArrayAvg ENDP
+
+END main
+
+TASK 3:
+INCLUDE Irvine32.inc
+.data
+prompt BYTE "Enter a number: ", 0
+result BYTE "The cube is: ", 0
+.code
+main PROC
+    call LocalCube        
+    exit                  
+main ENDP
+
+LocalCube PROC
+    LOCAL num : DWORD      
+    enter 4, 0      
+    mov ebp, esp           
+
+    mov edx, OFFSET prompt 
+    call WriteString       
+    call ReadInt         
+    mov [num], eax        
+    mov eax, [num]         
+    imul eax, eax          
+    imul eax, [num]        
+    mov edx, OFFSET result 
+    call WriteString      
+    call WriteDec          
+    call Crlf              
+
+    leave             
+    pop ebp
+    ret 4
+LocalCube ENDP
+
+
+END main
+
+TASK 4:
+INCLUDE Irvine32.inc
+
+.data
+msg1 byte "Enter a number: ", 0
+msg2 byte " is even.", 0
+msg3 byte " is not even.", 0
+msg4 byte "The smallest even number is: ", 0
+numbers dword 5 dup(0)
+msg5 byte "All numbers are even.", 0
+msg6 byte "Not all numbers are even so no smallest even.", 0
+isAllEven byte 0
+
+.code
+main PROC
+mov ecx, 5
+lea esi, numbers
+
+InputLoop:
+mov edx, offset msg1
+call writestring
+call readint
+mov [esi], eax
+add esi, 4
+loop InputLoop
+
+lea esi, numbers
+mov ecx, 5
+call CheckEven
+
+cmp byte ptr [isAllEven], 0
+je NotAllEven
+lea esi, numbers
+mov ecx, 5
+call SmallestEven
+jmp ExitProgram
+
+NotAllEven:
+mov edx, offset msg6
+call writestring
+jmp ExitProgram
+
+ExitProgram:
+exit
+main ENDP
+
+CheckEven PROC
+push ebp
+mov ebp, esp
+lea esi, numbers
+mov ecx, 5
+mov byte ptr [isAllEven], 1
+
+CheckEvenLoop:
+mov eax, [esi]
+test eax, 1
+jz Evenn
+
+call writedec
+mov edx, offset msg3
+call writestring
+call crlf
+mov byte ptr [isAllEven], 0
+
+jmp CheckEvenNext
+
+Evenn:
+call writedec
+mov edx, offset msg2
+call writestring
+call crlf
+
+CheckEvenNext:
+add esi, 4
+loop CheckEvenLoop
+
+pop ebp
+ret
+CheckEven ENDP
+
+SmallestEven PROC
+lea esi, numbers
+mov eax, [esi]
+add esi, 4
+mov ecx, 4
+
+SmallestLoop:
+mov edx, [esi]
+cmp eax, edx
+jng NoChange
+
+mov eax, edx
+
+NoChange:
+add esi, 4
+loop SmallestLoop
+
+mov edx, offset msg4
+call writestring
+call writeint
+call crlf
+
+ret
+SmallestEven ENDP
+    
+END main
+
+TASK 5:
+INCLUDE Irvine32.inc
+.data
+    msg1 byte "Enter a number: ", 0
+    array_size byte 5      
+    array dword 5 dup(0)    
+    msg2 byte "Sorted array: ", 0
+
+.code
+main PROC
+mov ecx, 5
+lea esi, array
+
+InputLoop:
+mov edx, offset msg1
+call writestring
+call readint
+mov [esi], eax
+add esi, 4
+loop InputLoop
+
+lea esi, array
+push esi
+call BubbleSort
+
+mov edx, offset msg2
+call writestring
+call crlf
+lea esi, array
+mov ecx, 5
+
+DisplayArray:
+mov eax, [esi]
+call writeDec
+call crlf
+add esi, 4
+loop DisplayArray
+
+exit
+main ENDP
+
+BubbleSort PROC
+push ebp
+mov ebp, esp
+mov esi, [ebp + 8]
+mov ecx, 5
+
+OuterLoop:
+dec ecx
+jz DoneSorting
+
+lea edi, [esi]
+mov ebx, 4
+
+InnerLoop:
+mov eax, [edi]
+mov edx, [edi + 4]
+cmp eax, edx
+jng NoSwap
+
+xchg eax, edx
+mov [edi], eax
+mov [edi + 4], edx
+
+NoSwap:
+add edi, 4
+dec ebx
+jnz InnerLoop
+
+jmp OuterLoop
+
+DoneSorting:
+pop ebp
+ret
+BubbleSort ENDP
+
+END main
