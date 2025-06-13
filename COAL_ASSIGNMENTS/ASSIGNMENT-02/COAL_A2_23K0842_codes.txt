@@ -1,0 +1,138 @@
+TITLE EXTRACTING SECONDS MINUTES AND HOURS
+INCLUDE Irvine32.inc
+.data
+   Seconds WORD ?
+   Minutes WORD ?
+   Hours WORD ?
+   msg1 BYTE "The seconds are: ",0
+   msg2 BYTE "The minutes are: ",0
+   msg3 BYTE "The hours are: ",0
+.code
+main PROC
+mov dx, 0010011001101010b
+   mov eax, 0
+   mov al, dl
+   and al ,00011111b
+   mov Seconds, ax
+mov edx, OFFSET msg1
+call WriteString
+movzx eax, al
+call WriteDec
+call Crlf
+   mov dx, 0010011001101010b
+   mov ax, dx
+   shr ax, 5
+   and ax, 00111111b
+   mov Minutes, ax
+mov edx, OFFSET msg2
+call WriteString
+movzx eax, ax
+call WriteDec
+call Crlf
+   mov dx, 0010011001101010b
+   mov ax, 0
+   mov ah, dh
+   shr ah, 3
+   and ah, 00011111b
+   mov Hours, ax
+mov edx, OFFSET msg3
+call WriteString
+movzx eax, ah
+call WriteDec
+call Crlf
+call DumpRegs                
+exit
+main ENDP
+END main
+
+
+TITLE WHILELOOP
+INCLUDE Irvine32.inc
+.data
+    myarray BYTE 100 DUP(0)  ; Reserve space for 100 integers initialized to 0
+.code
+main PROC
+    mov ecx, 100                      
+while_loop:
+    cmp ecx, 0                  
+    jl end_while         ; If j < 0, exit loop
+    cmp ecx, 100                 
+    jg end_while         ; If j > 100, exit loop
+    ; Copy myarray[j] to myarray[j+1]
+    mov al, myarray[ecx]
+    mov myarray[ecx+1], al
+    ; Decrement j
+    dec ecx              ; j = j - 1
+    jmp while_loop       ; Repeat loop
+
+end_while:
+    call DumpRegs          
+    exit
+main ENDP
+END main
+
+TITLE Q2a
+INCLUDE Irvine32.inc
+
+.data
+tosearch BYTE "computer organization and assembly language", 0 ; The string to search and modify
+toReplace BYTE ?                                               ; Character to be replaced (input)
+found BYTE "Here is the updated array or string", 0            ; Message if character found
+notfound BYTE "Sorry, character not found in the array or string", 0 ; Message if character not found
+flag BYTE 0
+.code
+main PROC
+    mov eax, 0
+    ; Read a character input from the user
+    call ReadChar                ; Read a single character into AL
+    mov toReplace, al            ; Store the character from AL into `toReplace`
+    call Crlf                    ; New line after input
+
+    ; Initialize registers for the search loop
+    mov esi, OFFSET tosearch     ; Point `esi` to start of `tosearch`
+    mov al, toReplace            ; Load `toReplace` character into AL for comparison
+    mov bl, '@'                  ; Replacement character
+    mov ecx, SIZEOF tosearch     ; Set counter to size of `tosearch`
+    mov edx, 0                   
+    
+L1:
+    mov dl, [esi]                ; Load the current character from `tosearch` into `dl`
+    cmp dl, 0                    ; Check if end of string
+   je check_found               ; If end of string, go to check if character was found
+
+    cmp dl, toReplace                   ; Compare current character with `toReplace`
+    jne next_char                ; If not equal, skip to next character
+
+    ; Replace the character with '@' if found
+    mov [esi], bl                ; Replace character at `esi` with '@'
+    mov [flag], 1                   ; Set found flag to 1
+    
+next_char:
+    inc esi                      ; Move to the next character in the string
+    loop L1                      ; Decrement `ecx` and loop if not zero
+
+check_found:
+    cmp [flag], 1                   ; Check if character was found
+   je display_found             ; If found, display updated array
+  jmp display_not_found        ; If not found, display not found message
+
+display_found:
+    mov edx, OFFSET found        ; Display the "updated array" message
+    call WriteString
+    call Crlf
+
+    mov edx, OFFSET tosearch     ; Display the modified array `tosearch`
+    call WriteString
+    jmp program_end
+
+display_not_found:
+    mov edx, OFFSET notfound     ; Display the "character not found" message
+    call WriteString
+
+program_end:
+    call Crlf
+    call DumpRegs             
+    exit
+
+main ENDP
+END main 

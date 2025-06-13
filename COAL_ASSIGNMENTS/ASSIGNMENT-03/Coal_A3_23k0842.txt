@@ -1,0 +1,393 @@
+ASSIGNMENT NO:03 (COAL)
+-----------------------------
+Q1:
+TITLE Division of Integers 
+INCLUDE Irvine32.inc
+.data
+dividend DWORD 0D4A4h
+divisor DWORD 0Ah
+quotient DWORD ?
+.code
+main PROC
+mov eax, 0
+mov ecx, 0
+mov eax, dividend
+mov ecx, divisor
+call DivIntegers
+mov eax, quotient
+call WriteDec
+call Crlf
+exit
+main ENDP
+DivIntegers PROC
+cmp eax, 5h 
+jle L2
+xor edx, edx
+div ecx
+mov quotient, eax
+call DivIntegers
+L2: 
+ret
+DivIntegers ENDP
+END main
+
+Q2:
+TITLE Q2
+INCLUDE Irvine32.inc
+.data
+arr BYTE 10,20,30,40,50
+msg BYTE "Enter a number you want to find in array: ",0
+tosearch BYTE ?
+flagfound BYTE 0
+foundmsg BYTE "Value found at index: ",0
+notfoundmsg BYTE "Value is not found",0
+
+searchValue PROTO ptrArray:PTR BYTE, _size:DWORD, value:BYTE
+
+.code
+main PROC
+mov eax, 0
+mov edx, OFFSET msg
+call WriteString
+call ReadInt
+mov tosearch, al
+mov esi, OFFSET arr
+mov ecx, LENGTHOF arr
+INVOKE searchValue, esi, ecx, al
+cmp flagfound, 1
+je valueFound
+
+mov edx, OFFSET notfoundmsg
+call WriteString
+jmp _exit
+
+valueFound:
+mov edx, OFFSET foundmsg
+call WriteString
+call WriteDec  ;Print the index stored in EAX
+
+_exit:
+exit
+main ENDP
+
+searchValue PROC ptrArray:PTR BYTE, _size:DWORD, value:BYTE
+; Load parameters into registers
+mov esi, ptrArray
+mov ecx, _size
+mov al, value
+
+cmp ecx, 0
+je notfound
+mov bl, [esi]
+cmp bl, al
+je found
+inc esi
+dec ecx
+INVOKE searchValue, esi, ecx, al 
+ret
+found:
+sub esi, OFFSET arr  ; calculate index (ESI - base address)
+mov eax, esi       ; Store index in EAX
+mov flagfound, 1    ; value found
+ret
+
+notfound:
+mov flagfound, 0   ; set flag to 0
+ret
+searchValue ENDP
+END main
+
+Q3:
+TITLE Q3
+INCLUDE Irvine32.inc
+.data
+string1 BYTE "This is the source string", 0  
+string2 BYTE 20 DUP(?)                       
+msg1 BYTE "Copied String after removing duplicates:", 0
+
+.code
+main PROC
+mov esi, OFFSET string1          
+mov edi, OFFSET string2          
+mov ecx, 0                  
+loop1:
+mov al, [esi]              
+cmp al, 0                      
+je done                         
+
+mov ebx, OFFSET string2        
+mov edx, ecx                   
+
+check_duplicates:
+cmp al, [ebx]                     
+je found_duplicate              
+inc ebx                       
+dec edx
+jns check_duplicates    
+
+mov [edi + ecx], al              
+inc ecx                         
+
+found_duplicate:
+inc esi                        
+jmp loop1                         
+
+done:
+mov BYTE PTR [edi + ecx], 0
+mov edx, OFFSET msg1
+call WriteString              
+mov edx, OFFSET string2
+call WriteString        
+call Crlf 
+
+exit
+main ENDP
+END main
+
+Q4:
+INCLUDE Irvine32.inc
+.data
+string BYTE "Advanced Programming in UNIX Environment", 0   
+msg1 BYTE "Vowels Count: ", 0                   
+a_or_A DWORD 0                            
+e_or_E DWORD 0
+i_or_I DWORD 0
+o_or_O DWORD 0
+u_or_U DWORD 0
+msg2 BYTE "a_or_A:",0
+msg3 BYTE "e_or_E:",0
+msg4 BYTE "i_or_I:",0
+msg5 BYTE "o_or_O:",0
+msg6 BYTE "u_or_U:",0
+
+.code
+main PROC
+mov esi, OFFSET string      
+mov ecx, SIZEOF string     
+  
+loop1:
+cmp ecx, 0            
+je done                   
+mov al, [esi]            
+cmp al, 0                   
+je done                    
+    
+cmp al, 'a'  
+je vowel_found_a
+cmp al, 'e'  
+je vowel_found_e
+cmp al, 'i'  
+je vowel_found_i
+cmp al, 'o'  
+je vowel_found_o
+cmp al, 'u'  
+je vowel_found_u
+cmp al, 'A'  
+je vowel_found_a
+cmp al, 'E'  
+je vowel_found_e
+cmp al, 'I'  
+je vowel_found_i
+cmp al, 'O'  
+je vowel_found_o
+cmp al, 'U'  
+je vowel_found_u
+
+inc esi                 
+dec ecx                   
+jmp loop1              
+
+vowel_found_a:
+inc DWORD PTR [a_or_A]     
+inc esi
+dec ecx
+jmp loop1
+
+vowel_found_e:
+inc DWORD PTR [e_or_E]    
+inc esi
+dec ecx
+jmp loop1
+
+vowel_found_i:
+inc DWORD PTR [i_or_I]     
+inc esi
+dec ecx
+jmp loop1
+
+vowel_found_o:
+inc DWORD PTR [o_or_O]    
+inc esi
+dec ecx
+jmp loop1
+
+vowel_found_u:
+inc DWORD PTR [u_or_U]     
+inc esi
+dec ecx
+jmp loop1
+
+done:
+mov edx, OFFSET msg1
+call WriteString          
+call crlf                  
+
+mov edx, OFFSET msg2
+call WriteString
+mov eax, [a_or_A]
+call WriteDec             
+call crlf
+
+mov edx, OFFSET msg3
+call WriteString
+mov eax, [e_or_E]
+call WriteDec              
+call crlf
+
+mov edx, OFFSET msg4
+call WriteString
+mov eax, [i_or_I]
+call WriteDec            
+call crlf
+
+mov edx, OFFSET msg5
+call WriteString
+mov eax, [o_or_O]
+call WriteDec             
+call crlf
+
+mov edx, OFFSET msg6
+call WriteString
+mov eax, [u_or_U]
+call WriteDec              
+call crlf
+exit                      
+main ENDP
+END main
+
+Q5:
+INCLUDE Irvine32.inc
+
+.data
+result1 BYTE "Result for 1st test value:",0
+result2 BYTE "Result for 2nd test value:",0
+result3 BYTE "Result for 3rd test value:",0
+result4 BYTE "Result for 4th test value:",0
+result5 BYTE "Result for 5th test value:",0
+
+.code
+
+DifferentInputs PROTO var1:DWORD,var2:DWORD,var3:DWORD
+
+main PROC
+
+INVOKE DifferentInputs ,10,20,30
+lea edx,result1
+call WriteString
+call WriteInt
+call crlf
+
+INVOKE DifferentInputs, 40,50,40
+lea edx,result2
+call WriteString
+call WriteInt
+call crlf
+
+INVOKE DifferentInputs, 50,60,70
+lea edx,result3
+call WriteString
+call WriteInt
+call crlf
+
+INVOKE DifferentInputs ,80,80,80
+lea edx,result4
+call WriteString
+call WriteInt
+call crlf
+
+INVOKE DifferentInputs, 90,40,50
+lea edx,result5
+call WriteString
+call WriteInt
+call crlf
+
+exit
+main ENDP
+
+DifferentInputs PROC var1:DWORD,var2:DWORD,var3:DWORD
+
+mov eax, var1
+mov ebx, var2
+cmp eax, ebx
+je not_different         
+
+cmp eax, var3
+je not_different     
+
+cmp ebx, var3
+je not_different       
+
+mov eax, 1
+ret
+
+not_different:
+mov eax, 0
+ret
+
+DifferentInputs ENDP
+
+END main
+
+Q6:
+INCLUDE Irvine32.inc
+
+.data
+original BYTE "Original String: ", 0
+changed BYTE "Changed String: ", 0
+string BYTE "###ABC", 0
+
+.code
+strtrim PROTO, string1:PTR BYTE, removeChar:BYTE
+
+main PROC
+lea edx, original
+call WriteString
+lea edx, string
+call WriteString
+call Crlf
+
+INVOKE strtrim, ADDR string, '#'
+
+lea edx, changed
+call WriteString
+lea edx, string
+call WriteString
+call Crlf
+
+exit
+main ENDP
+strtrim PROC uses esi edi, string1:PTR BYTE, removeChar:BYTE
+mov esi, string1
+mov edi, string1
+mov al, removeChar
+
+trim_loop:
+mov dl, [esi]
+cmp dl, 0
+je end_trim
+cmp dl, al
+jne copy_char
+inc esi
+jmp trim_loop
+
+copy_char:
+mov [edi], dl
+inc esi
+inc edi
+jmp trim_loop
+
+end_trim:
+mov byte ptr [edi], 0
+ret
+strtrim ENDP
+END main
